@@ -436,6 +436,21 @@ config.mouse_bindings = {
 	},
 }
 
+-- ─── Leader indicator ────────────────────────────────────────────────────────
+
+wezterm.on("update-right-status", function(window, _)
+	if window:leader_is_active() then
+		window:set_right_status(wezterm.format({
+			{ Attribute = { Intensity = "Bold" } },
+			{ Background = { Color = "#CDC1FF" } },
+			{ Foreground = { Color = "#1C1917" } },
+			{ Text = "  LEADER  " },
+		}))
+	else
+		window:set_right_status("")
+	end
+end)
+
 -- ─── Window title ─────────────────────────────────────────────────────────────
 
 wezterm.on("format-window-title", function(_, pane)
