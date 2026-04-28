@@ -273,148 +273,177 @@ config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
 	-- ── Pane splits (leader + " / % / s / v) ─────────────────────────────────
 	-- mirrors: bind '"' split-window -v  /  bind s split-window -v
-	{ key = '"',  mods = "LEADER",       action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "s",  mods = "LEADER",       action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = '"', mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "s", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	-- mirrors: bind '%' split-window -h  /  bind v split-window -h
-	{ key = "%",  mods = "LEADER",       action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "v",  mods = "LEADER",       action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "%", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "v", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 
 	-- ── Pane navigation (C-h/j/k/l, no leader) ───────────────────────────────
 	-- mirrors: bind-key -n C-h/j/k/l select-pane -L/D/U/R
-	{ key = "h",  mods = "CTRL",         action = act.ActivatePaneDirection("Left") },
-	{ key = "j",  mods = "CTRL",         action = act.ActivatePaneDirection("Down") },
-	{ key = "k",  mods = "CTRL",         action = act.ActivatePaneDirection("Up") },
-	{ key = "l",  mods = "CTRL",         action = act.ActivatePaneDirection("Right") },
+	{ key = "h", mods = "CTRL", action = act.ActivatePaneDirection("Left") },
+	{ key = "j", mods = "CTRL", action = act.ActivatePaneDirection("Down") },
+	{ key = "k", mods = "CTRL", action = act.ActivatePaneDirection("Up") },
+	{ key = "l", mods = "CTRL", action = act.ActivatePaneDirection("Right") },
 
 	-- ── Pane resize (M-C-h/j/k/l) ────────────────────────────────────────────
 	-- mirrors: bind-key -n M-C-h/j/k/l resize-pane -L/D/U/R
-	{ key = "h",  mods = "CTRL|ALT",     action = act.AdjustPaneSize({ "Left",  5 }) },
-	{ key = "j",  mods = "CTRL|ALT",     action = act.AdjustPaneSize({ "Down",  5 }) },
-	{ key = "k",  mods = "CTRL|ALT",     action = act.AdjustPaneSize({ "Up",    5 }) },
-	{ key = "l",  mods = "CTRL|ALT",     action = act.AdjustPaneSize({ "Right", 5 }) },
+	{ key = "h", mods = "CTRL|ALT", action = act.AdjustPaneSize({ "Left", 5 }) },
+	{ key = "j", mods = "CTRL|ALT", action = act.AdjustPaneSize({ "Down", 5 }) },
+	{ key = "k", mods = "CTRL|ALT", action = act.AdjustPaneSize({ "Up", 5 }) },
+	{ key = "l", mods = "CTRL|ALT", action = act.AdjustPaneSize({ "Right", 5 }) },
 
 	-- ── Pane rotate (leader + h/l) ───────────────────────────────────────────
 	-- WezTerm has no directional pane swap; RotatePanes is the closest equivalent
-	{ key = "h",  mods = "LEADER",       action = act.RotatePanes("CounterClockwise") },
-	{ key = "l",  mods = "LEADER",       action = act.RotatePanes("Clockwise") },
+	{ key = "h", mods = "LEADER", action = act.RotatePanes("CounterClockwise") },
+	{ key = "l", mods = "LEADER", action = act.RotatePanes("Clockwise") },
 
 	-- ── Kill pane (leader + x / w) ────────────────────────────────────────────
 	-- mirrors: bind x kill-pane  /  bind-key w kill-pane
-	{ key = "x",  mods = "LEADER",       action = act.CloseCurrentPane({ confirm = false }) },
-	{ key = "w",  mods = "LEADER",       action = act.CloseCurrentPane({ confirm = false }) },
+	{ key = "x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = false }) },
+	{ key = "w", mods = "LEADER", action = act.CloseCurrentPane({ confirm = false }) },
 
 	-- ── Zoom pane (leader + z) ────────────────────────────────────────────────
 	-- mirrors: tmux default prefix + z
-	{ key = "z",  mods = "LEADER",       action = act.TogglePaneZoomState },
+	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
 
 	-- ── Tab navigation (C-q / C-e, no leader) ────────────────────────────────
 	-- mirrors: bind -n C-q previous-window  /  bind -n C-e next-window
-	{ key = "q",  mods = "CTRL",         action = act.ActivateTabRelative(-1) },
-	{ key = "e",  mods = "CTRL",         action = act.ActivateTabRelative(1) },
+	{ key = "q", mods = "CTRL", action = act.ActivateTabRelative(-1) },
+	{ key = "e", mods = "CTRL", action = act.ActivateTabRelative(1) },
 
 	-- ── New tab (leader + t) ──────────────────────────────────────────────────
 	-- mirrors: bind-key t new-window
-	{ key = "t",  mods = "LEADER",       action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "t", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
 
 	-- ── Move tab left / right (leader + < / >) ───────────────────────────────
 	-- mirrors: bind-key -r < swap-window -t -1  /  bind-key -r > swap-window -t +1
-	{ key = "<",  mods = "LEADER",       action = act.MoveTabRelative(-1) },
-	{ key = ">",  mods = "LEADER",       action = act.MoveTabRelative(1) },
+	{ key = "<", mods = "LEADER", action = act.MoveTabRelative(-1) },
+	{ key = ">", mods = "LEADER", action = act.MoveTabRelative(1) },
 
 	-- ── Rename tab (leader + r) ───────────────────────────────────────────────
 	-- mirrors: bind-key r command-prompt "rename-window %%"
-	{ key = "r",  mods = "LEADER",       action = act.PromptInputLine({
-		description = "Rename tab:",
-		action = wezterm.action_callback(function(window, _, line)
-			if line and line ~= "" then
-				window:active_tab():set_title(line:upper())
-			end
-		end),
-	}) },
+	{
+		key = "r",
+		mods = "LEADER",
+		action = act.PromptInputLine({
+			description = "Rename tab:",
+			action = wezterm.action_callback(function(window, _, line)
+				if line and line ~= "" then
+					window:active_tab():set_title(line:upper())
+				end
+			end),
+		}),
+	},
 
 	-- ── Session / workspace management ──────────────────────────────────────
 	-- mirrors: bind S (session picker)
-	{ key = "S",  mods = "LEADER",       action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }) },
+	{ key = "S", mods = "LEADER", action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }) },
 
 	-- mirrors: bind R rename-session
-	{ key = "R",  mods = "LEADER",       action = wezterm.action_callback(function(window, _)
-		local current = window:active_workspace()
-		window:perform_action(act.PromptInputLine({
-			description = "Rename workspace (current: " .. current .. "):",
-			action = wezterm.action_callback(function(inner_window, _, line)
-				if line and line ~= "" then
-					wezterm.mux.rename_workspace(inner_window:active_workspace(), line:upper())
-				end
-			end),
-		}), window:active_pane())
-	end) },
+	{
+		key = "R",
+		mods = "LEADER",
+		action = wezterm.action_callback(function(window, _)
+			local current = window:active_workspace()
+			window:perform_action(
+				act.PromptInputLine({
+					description = "Rename workspace (current: " .. current .. "):",
+					action = wezterm.action_callback(function(inner_window, _, line)
+						if line and line ~= "" then
+							wezterm.mux.rename_workspace(inner_window:active_workspace(), line:upper())
+						end
+					end),
+				}),
+				window:active_pane()
+			)
+		end),
+	},
 
 	-- switch to or create a named workspace
-	{ key = "N",  mods = "LEADER",       action = act.PromptInputLine({
-		description = "Switch to or create workspace:",
-		action = wezterm.action_callback(function(window, pane, line)
-			if line and line ~= "" then
-				window:perform_action(act.SwitchToWorkspace({ name = line:upper() }), pane)
-			end
-		end),
-	}) },
+	{
+		key = "N",
+		mods = "LEADER",
+		action = act.PromptInputLine({
+			description = "Switch to or create workspace:",
+			action = wezterm.action_callback(function(window, pane, line)
+				if line and line ~= "" then
+					window:perform_action(act.SwitchToWorkspace({ name = line:upper() }), pane)
+				end
+			end),
+		}),
+	},
 
 	-- ── Clear screen (C-; → send C-l) ────────────────────────────────────────
 	-- mirrors: bind-key -n C-\; send-keys C-l
-	{ key = ";",  mods = "CTRL",         action = act.SendKey({ key = "l", mods = "CTRL" }) },
+	{ key = ";", mods = "CTRL", action = act.SendKey({ key = "l", mods = "CTRL" }) },
 
 	-- ── Copy / paste ──────────────────────────────────────────────────────────
-	{ key = "c",  mods = "CTRL|SHIFT",   action = act.CopyTo("ClipboardAndPrimarySelection") },
-	{ key = "v",  mods = "CTRL|SHIFT",   action = act.PasteFrom("Clipboard") },
+	{ key = "c", mods = "CTRL|SHIFT", action = act.CopyTo("ClipboardAndPrimarySelection") },
+	{ key = "v", mods = "CTRL|SHIFT", action = act.PasteFrom("Clipboard") },
 
 	-- ── Theme toggle (CTRL+SHIFT+ALT+l) ──────────────────────────────────────
-	{ key = "l",  mods = "CTRL|SHIFT|ALT", action = wezterm.action_callback(function(window, _)
-		local overrides = window:get_config_overrides() or {}
-		local current = overrides.color_scheme or theme_name
-		local new_theme, new_name
-		if current == "Custom Theme" then
-			new_theme, new_name = "light", "Custom Theme Light"
-		else
-			new_theme, new_name = "dark", "Custom Theme"
-		end
-		overrides.color_scheme = new_name
-		window:set_config_overrides(overrides)
-		save_theme_state(new_theme)
-	end) },
+	{
+		key = "l",
+		mods = "CTRL|SHIFT|ALT",
+		action = wezterm.action_callback(function(window, _)
+			local overrides = window:get_config_overrides() or {}
+			local current = overrides.color_scheme or theme_name
+			local new_theme, new_name
+			if current == "Custom Theme" then
+				new_theme, new_name = "light", "Custom Theme Light"
+			else
+				new_theme, new_name = "dark", "Custom Theme"
+			end
+			overrides.color_scheme = new_name
+			window:set_config_overrides(overrides)
+			save_theme_state(new_theme)
+		end),
+	},
 
 	-- ── Toggle title bar (CTRL+ALT+t) ────────────────────────────────────────
-	{ key = "t",  mods = "CTRL|ALT",     action = wezterm.action_callback(function(window, _)
-		local overrides = window:get_config_overrides() or {}
-		if overrides.window_decorations then
-			window:set_config_overrides(nil)
-		else
-			overrides.window_decorations = "TITLE|RESIZE"
-			window:set_config_overrides(overrides)
-		end
-	end) },
-
-	-- ── Toggle ligatures (CTRL+ALT+a) ────────────────────────────────────────
-	{ key = "a",  mods = "CTRL|ALT",     action = wezterm.action_callback(function(window, _)
-		local overrides = window:get_config_overrides() or {}
-		if not overrides.harfbuzz_features then
-			overrides.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
-		else
-			overrides.harfbuzz_features = nil
-		end
-		window:set_config_overrides(overrides)
-	end) },
-
-	-- ── Rename window title (CTRL+SHIFT+r) ───────────────────────────────────
-	{ key = "r",  mods = "CTRL|SHIFT",   action = act.PromptInputLine({
-		description = "Enter new window name (empty to reset):",
-		action = wezterm.action_callback(function(_, pane, line)
-			if line ~= nil then
-				pane:inject_output(
-					"\033]1337;SetUserVar=window_title=" .. wezterm.base64_encode(line) .. "\007"
-				)
+	{
+		key = "t",
+		mods = "CTRL|ALT",
+		action = wezterm.action_callback(function(window, _)
+			local overrides = window:get_config_overrides() or {}
+			if overrides.window_decorations then
+				window:set_config_overrides(nil)
+			else
+				overrides.window_decorations = "TITLE|RESIZE"
+				window:set_config_overrides(overrides)
 			end
 		end),
-	}) },
+	},
+
+	-- ── Toggle ligatures (CTRL+ALT+a) ────────────────────────────────────────
+	{
+		key = "a",
+		mods = "CTRL|ALT",
+		action = wezterm.action_callback(function(window, _)
+			local overrides = window:get_config_overrides() or {}
+			if not overrides.harfbuzz_features then
+				overrides.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
+			else
+				overrides.harfbuzz_features = nil
+			end
+			window:set_config_overrides(overrides)
+		end),
+	},
+
+	-- ── Rename window title (CTRL+SHIFT+r) ───────────────────────────────────
+	{
+		key = "r",
+		mods = "CTRL|SHIFT",
+		action = act.PromptInputLine({
+			description = "Enter new window name (empty to reset):",
+			action = wezterm.action_callback(function(_, pane, line)
+				if line ~= nil then
+					pane:inject_output("\033]1337;SetUserVar=window_title=" .. wezterm.base64_encode(line) .. "\007")
+				end
+			end),
+		}),
+	},
 }
 
 -- ─── Mouse bindings ───────────────────────────────────────────────────────────

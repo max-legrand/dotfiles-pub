@@ -1,5 +1,4 @@
 -- AI assistants: Avante, Sidekick, Amp
--- Note: Copilot and Supermaven are loaded via completion/blink.lua on InsertEnter
 
 -- Dependencies (loaded eagerly as they're shared)
 vim.pack.add({ "https://github.com/nvim-lua/plenary.nvim" })

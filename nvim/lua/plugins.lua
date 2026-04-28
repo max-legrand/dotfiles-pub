@@ -152,5 +152,4 @@ vim.pack.add({ "https://github.com/tpope/vim-surround" })
 vim.pack.add({ "https://github.com/chentoast/marks.nvim" })
 require("marks").setup({})
 
-require("fff")
 require("plugins.glance")

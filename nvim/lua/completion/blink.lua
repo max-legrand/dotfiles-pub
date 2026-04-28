@@ -35,12 +35,6 @@ vim.pack.add({ {
 } })
 require("luasnip").setup()
 
-vim.pack.add({ "https://github.com/fang2hou/blink-copilot" })
-require("blink-copilot").setup({
-	max_completions = 1, -- Global default for max completions
-	max_attempts = 2, -- Global default for max attempts
-})
-
 vim.pack.add({
 	{
 		src = "https://github.com/saghen/blink.cmp",
@@ -58,8 +52,17 @@ vim.pack.add({
 		},
 	},
 })
-local types = require("blink.cmp.types")
+
 require("blink.cmp").setup({
+	-- Pure-Lua matcher: skip the prebuilt Rust binary entirely so the vendored
+	-- tree stays cross-platform. The matcher is per-keystroke hot, so cap the
+	-- expensive bits: 1 typo of tolerance, no frecency/proximity scoring.
+	fuzzy = {
+		implementation = "lua",
+		max_typos = function() return 1 end,
+		frecency = { enabled = false },
+		use_proximity = false,
+	},
 	keymap = {
 		["<Tab>"] = {
 			"snippet_forward",
@@ -80,8 +83,6 @@ require("blink.cmp").setup({
 	snippets = { preset = "luasnip" },
 	appearance = {
 		kind_icons = kind_icons,
-		-- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-		-- adjusts spacing to ensure icons are aligned
 		nerd_font_variant = "normal",
 	},
 	cmdline = {
@@ -92,27 +93,16 @@ require("blink.cmp").setup({
 		},
 	},
 	completion = {
+		list = { max_items = 25 },
 		menu = {
-			--     draw = {
-			--         columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
-			--         treesitter = { "lsp" },
-			--     },
-			-- border = "rounded",
 			max_height = 25,
 			border = nil,
-			--     winhighlight =
-			--     "Normal:BlinkCmpMenu,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None",
-			--     scrollbar = true,
 		},
-
 		documentation = { auto_show = true, auto_show_delay_ms = 500 },
 		ghost_text = { enabled = true },
 	},
-
-	-- experimental signature help support
 	signature = { enabled = true },
 	sources = {
-		-- default = { "supermaven", "copilot", "snippets", "lsp", "path", "buffer", "avante_commands", "avante_mentions", "avante_files", },
 		default = { "snippets", "lsp", "path", "buffer" },
 		per_filetype = {
 			sql = { "snippets", "dadbod", "buffer" },

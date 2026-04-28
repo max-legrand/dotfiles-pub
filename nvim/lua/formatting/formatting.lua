@@ -97,14 +97,14 @@ require("conform").setup({
 			},
 		},
 		oxfmt = {
-			stdin = false,
+			stdin = true,
 			command = "oxfmt",
 			args = function(ctx)
 				local config_file = find_oxfmtrc()
 				if config_file then
-					return { "-c", config_file, "$FILENAME" }
+					return { "-c", config_file, "--stdin-filepath", "$FILENAME" }
 				end
-				return { "$FILENAME" }
+				return { "--stdin-filepath", "$FILENAME" }
 			end,
 		},
 	},
