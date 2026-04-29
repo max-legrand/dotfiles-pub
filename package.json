@@ -1,0 +1,19 @@
+{
+  "name": "minimal-theme",
+  "displayName": "Minimal",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Minimal Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/minimal-dark-color-theme.json"
+      }
+    ]
+  }
+}
