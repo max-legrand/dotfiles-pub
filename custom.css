@@ -1,0 +1,39 @@
+.theme-dark {
+  /* === Color palette applied from Fish/Nvim === */
+  --background-primary: #1C1917;        /* dark_bg */
+  --background-primary-alt: #2f2d3b;    /* dark_bg1 */
+  --background-secondary: #1C1917;      /* dark_bg */
+  --background-secondary-alt: #2f2d3b;  /* dark_bg1 */
+
+  --text-normal: #DDDDDD;               /* dark_fg */
+  --text-muted: #A8A8A8;                /* dark_fg1 */
+
+  /* Headings */
+  --text-title-h1: #EC8FB0;             /* dark_red */
+  --text-title-h2: #CDC1FF;             /* dark_pink */
+  --text-title-h3: #B77E64;             /* dark_wood */
+  --text-title-h4: #6099C0;             /* dark_water */
+  --text-title-h5: #66A5AD;             /* dark_sky */
+  --text-title-h6: #898989;             /* dark_gray */
+
+  /* Links & interactive */
+  --text-link: #66A5AD;                 /* dark_sky */
+  --text-a: #EC8FB0;                    /* dark_red */
+  --text-a-hover: #CDC1FF;              /* dark_pink */
+
+  /* 🔮 highlight / cursor accent = pink now */
+  --interactive-accent: #CDC1FF;        /* dark_pink */
+  --interactive-accent-hover: #EC8FB0;  /* dark_red as hover accent */
+  --interactive-accent-rgb: 205, 193, 255;
+
+  /* Inline/code & tags */
+  --markup-code: #D6C5A5;               /* dark_yellow */
+  --text-tag: #00FFAA;                  /* dark_green */
+
+  /* Highlight / mark */
+  --text-mark: #D6C5A5;                 /* dark_yellow */
+
+  /* Blockquotes */
+  --blockquote-border: #CDC1FF;         /* dark_pink */
+}
+
