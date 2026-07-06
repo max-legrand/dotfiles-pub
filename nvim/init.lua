@@ -1,4 +1,3 @@
-require("vendor")
 require("core")
 require("keymaps")
 require("plugins")

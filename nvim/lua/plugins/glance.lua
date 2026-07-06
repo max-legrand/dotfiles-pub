@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/dnlhc/glance.nvim" })
 
 vim.keymap.set("n", "gD", "<CMD>Glance definitions<CR>")
 vim.keymap.set("n", "gR", "<CMD>Glance references<CR>")

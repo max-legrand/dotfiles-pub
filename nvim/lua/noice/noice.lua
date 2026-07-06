@@ -1,5 +1,3 @@
-vim.pack.add({ "https://github.com/rcarriga/nvim-notify" })
-vim.pack.add({ "https://github.com/folke/noice.nvim" })
 require("notify").setup({
 	background_colour = "#111111",
 	timeout = 1500,

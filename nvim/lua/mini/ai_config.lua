@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/echasnovski/mini.ai" })
 local ai = require("mini.ai")
 ai.setup({
 	n_lines = 500,

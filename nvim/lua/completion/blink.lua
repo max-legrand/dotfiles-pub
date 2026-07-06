@@ -26,32 +26,9 @@ local kind_icons = {
 	TypeParameter = "󰅲 ",
 }
 
-vim.pack.add({ "https://github.com/saghen/blink.compat" })
 require("blink.compat").setup()
 
-vim.pack.add({ {
-	src = "https://github.com/L3MON4D3/LuaSnip",
-	version = vim.version.range("2.*"),
-} })
 require("luasnip").setup()
-
-vim.pack.add({
-	{
-		src = "https://github.com/saghen/blink.cmp",
-		dependencies = {
-			"saghen/blink.compat",
-			"L3MON4D3/LuaSnip",
-		},
-		version = "1.*",
-		opts = {
-			opts_extend = {
-				"sources.completion.enabled_providers",
-				"sources.compat",
-				"sources.default",
-			},
-		},
-	},
-})
 
 require("blink.cmp").setup({
 	-- Pure-Lua matcher: skip the prebuilt Rust binary entirely so the vendored

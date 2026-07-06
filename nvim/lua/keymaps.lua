@@ -69,14 +69,22 @@ vim.keymap.set("n", "<leader>p", function()
 end, opts)
 
 vim.diagnostic.config({
-	jump = { float = true },
 	float = { border = "rounded" },
 })
+
+local function open_diagnostic_float(_, bufnr)
+	vim.diagnostic.open_float({
+		bufnr = bufnr,
+		scope = "cursor",
+		focus = false,
+	})
+end
+
 vim.keymap.set("n", "gn", function()
-	vim.diagnostic.jump({ count = 1, float = true })
+	vim.diagnostic.jump({ count = 1, on_jump = open_diagnostic_float })
 end, opts)
 vim.keymap.set("n", "gN", function()
-	vim.diagnostic.jump({ count = -1, float = true })
+	vim.diagnostic.jump({ count = -1, on_jump = open_diagnostic_float })
 end, opts)
 
 vim.keymap.set("n", "<leader>ca", function()

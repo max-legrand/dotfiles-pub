@@ -1,12 +1,3 @@
-vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter" })
-vim.pack.add({
-	{
-		src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
-		version = "main",
-	},
-})
-vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter-context" })
-
 -- Treesitter highlight/indent are built-in on nvim 0.12, enabled by default.
 -- No need to call vim.treesitter.start() — it runs automatically per buffer.
 

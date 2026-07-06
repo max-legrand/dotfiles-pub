@@ -1,6 +1,3 @@
-vim.pack.add({
-	"https://github.com/stevearc/conform.nvim",
-})
 local config_cache = {}
 local uv = vim.loop
 

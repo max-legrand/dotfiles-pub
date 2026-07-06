@@ -1,5 +1,6 @@
-vim.pack.add({ "https://github.com/seblj/roslyn.nvim" })
-
+-- NOTE: this module is not required from init.lua in the public config, so
+-- roslyn.nvim is not declared in lua/plugins.lua. If you want C# support, add
+-- "seblj/roslyn.nvim" as a lazy spec and require this module.
 require("roslyn").setup({
 	filewatching = "off",
 	extensions = {

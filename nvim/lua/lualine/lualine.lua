@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
 local uv = vim.uv or vim.loop
 
 -- cache for the change id

@@ -1,3 +1,0 @@
-pack/vendor/start/nvim-treesitter/parser/*.so
-pack/vendor/start/nvim-treesitter/parser/*.dll
-pack/vendor/start/nvim-treesitter/parser/*.dylib
