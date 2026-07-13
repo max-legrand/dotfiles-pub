@@ -1,0 +1,265 @@
+// ============================================================================
+// Zellij config mirroring ~/.tmux.conf
+//
+// tmux -> zellij mapping summary:
+//   prefix               Ctrl+Space enters "tmux" mode (press key, then act)
+//   pane nav             Ctrl+h/j/k/l directly (no prefix), like tmux -n binds
+//   pane resize          Ctrl+Alt+h/j/k/l and Ctrl+Shift+arrows (no prefix)
+//   window prev/next     Ctrl+q / Ctrl+e directly (overrides zellij's quit!)
+//   popup terminal       Ctrl+f toggles floating panes (popuptmux.sh analog)
+//   clear screen         Ctrl+; passes C-l through (Ctrl+l is taken by nav)
+//   splits               prefix + " / % / s / v
+//   swap pane            prefix + h/j/k/l (repeatable via staying in mode? no —
+//                        zellij exits mode after one action; press prefix again)
+//   copy mode            prefix + [  (j/k/d/u/J/K scroll; keyboard visual
+//                        selection doesn't exist in zellij — use mouse drag
+//                        (copy_on_select) or prefix+x to open scrollback in
+//                        $EDITOR and yank there, like your tmux `bind x`)
+//   rename tab/session   prefix + r renames the tab inline; prefix + R opens
+//                        the session-manager where Ctrl+r renames the session
+//   session picker       prefix + S (built-in session-manager, floating)
+//   move tab left/right  prefix + < / >
+//   new tab / kill pane  prefix + t (or c) / w
+//   zoom                 prefix + z (Z-equivalent; fullscreen)
+//   detach               prefix + d
+//
+// Not portable from tmux (no zellij equivalent):
+//   - Alt+; status-bar toggle (no runtime toggle; the zjstatus layout keeps
+//     it to one bottom line like tmux)
+//   - hide-pane.sh / show-pane.sh (prefix+H/J) — closest is floating panes
+//   - auto-uppercase rename hooks
+//   - prefix+M "move window to index" — only < / > nudging exists
+// ============================================================================
+
+keybinds clear-defaults=true {
+    normal {
+    }
+
+    locked {
+        bind "Ctrl g" { SwitchToMode "normal"; }
+    }
+
+    // ---- direct (no-prefix) bindings, like tmux `bind -n` ----
+    shared_except "locked" {
+        // pane navigation: Ctrl + h/j/k/l
+        bind "Ctrl h" { MoveFocus "left"; }
+        bind "Ctrl j" { MoveFocus "down"; }
+        bind "Ctrl k" { MoveFocus "up"; }
+        bind "Ctrl l" { MoveFocus "right"; }
+
+        // pane resize: Ctrl+Alt + h/j/k/l  (tmux M-C-h/j/k/l)
+        bind "Ctrl Shift h" { Resize "Increase left"; }
+        bind "Ctrl Shift j" { Resize "Increase down"; }
+        bind "Ctrl Shift k" { Resize "Increase up"; }
+        bind "Ctrl Shift l" { Resize "Increase right"; }
+
+        // pane resize: Ctrl+Shift + arrows (needs kitty keyboard protocol,
+        // same terminal requirement as your tmux extended-keys setup)
+        bind "Ctrl Shift left"  { Resize "Increase left"; }
+        bind "Ctrl Shift down"  { Resize "Increase down"; }
+        bind "Ctrl Shift up"    { Resize "Increase up"; }
+        bind "Ctrl Shift right" { Resize "Increase right"; }
+
+        // window (tab) switching: Ctrl+q / Ctrl+e
+        bind "Ctrl q" { GoToPreviousTab; }
+        bind "Ctrl e" { GoToNextTab; }
+
+        // floating "popup" terminal: Ctrl+f (popuptmux.sh analog).
+        // NOTE: do not add NextSwapLayout here — cycling swap layouts stops
+        // zellij auto-applying the floating arrangements afterwards.
+        bind "Ctrl f" { ToggleFloatingPanes; }
+
+        // Ctrl+l is taken by pane nav, so Ctrl+; sends a literal C-l (clear)
+        bind "Ctrl ;" { Write 12; }
+
+        // lock everything (escape hatch when a TUI needs the Ctrl keys)
+        bind "Ctrl g" { SwitchToMode "locked"; }
+    }
+
+    shared_except "locked" "tmux" {
+        bind "Ctrl space" { SwitchToMode "tmux"; }
+    }
+
+    // ---- prefix mode (Ctrl+Space, like tmux prefix) ----
+    tmux {
+        // press prefix twice to send a literal Ctrl+Space through
+        bind "Ctrl space" { Write 0; SwitchToMode "normal"; }
+
+        // splits: " / % (tmux defaults) and s / v (your custom binds)
+        bind "\"" { NewPane "down"; SwitchToMode "normal"; }
+        bind "%"  { NewPane "right"; SwitchToMode "normal"; }
+        bind "s"  { NewPane "down"; SwitchToMode "normal"; }
+        bind "v"  { NewPane "right"; SwitchToMode "normal"; }
+
+        // swap pane with directional neighbor (your prefix h/j/k/l)
+        bind "h" { MovePane "left"; SwitchToMode "normal"; }
+        bind "j" { MovePane "down"; SwitchToMode "normal"; }
+        bind "k" { MovePane "up"; SwitchToMode "normal"; }
+        bind "l" { MovePane "right"; SwitchToMode "normal"; }
+
+        // tabs — naming the layout makes each new tab re-read it from disk,
+        // so zjstatus/bar edits show up in new tabs without a session restart
+        bind "t" { NewTab { layout "dracula"; }; SwitchToMode "normal"; }
+        bind "c" { NewTab { layout "dracula"; }; SwitchToMode "normal"; }
+        bind "w" { CloseFocus; SwitchToMode "normal"; }
+        bind "<" { MoveTab "left"; SwitchToMode "normal"; }
+        bind ">" { MoveTab "right"; SwitchToMode "normal"; }
+        bind "1" { GoToTab 1; SwitchToMode "normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "normal"; }
+
+        // zoom (tmux prefix+z)
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
+
+        // copy / scrollback
+        bind "[" { SwitchToMode "scroll"; }
+        // open scrollback in $EDITOR (your `bind x` capture-pane -> nvim)
+        bind "x" { EditScrollback; SwitchToMode "normal"; }
+
+        // rename tab / session via the same in-place prompt (it temporarily
+        // replaces the focused pane; a floating prompt would reveal the
+        // hidden Ctrl+f popup behind it). Names are auto-uppercased.
+        bind "r" {
+            Run "bash" "/home/max/.config/zellij/widgets/rename.sh" "tab" {
+                in_place true
+                close_on_exit true
+                name "rename"
+            }
+            SwitchToMode "normal"
+        }
+        bind "R" {
+            Run "bash" "/home/max/.config/zellij/widgets/rename.sh" "session" {
+                in_place true
+                close_on_exit true
+                name "rename"
+            }
+            SwitchToMode "normal"
+        }
+
+        // session picker (your prefix+S session-picker.sh)
+        bind "S" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "normal"
+        }
+
+        bind "f" { ToggleFloatingPanes; SwitchToMode "normal"; }
+        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "normal"; }
+        bind "o" { FocusNextPane; SwitchToMode "normal"; }
+        bind "d" { Detach; }
+
+        bind "esc" { SwitchToMode "normal"; }
+        bind "enter" { SwitchToMode "normal"; }
+    }
+
+    // ---- copy mode (vi-flavored, like your copy-mode-vi) ----
+    scroll {
+        bind "j" { ScrollDown; }
+        bind "k" { ScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+        bind "J" { HalfPageScrollDown; }   // your copy-mode J (half page + center)
+        bind "K" { HalfPageScrollUp; }     // your copy-mode K
+        bind "Ctrl f" { PageScrollDown; }
+        bind "Ctrl b" { PageScrollUp; }
+        bind "G" { ScrollToBottom; }
+        bind "e" { EditScrollback; SwitchToMode "normal"; }
+        bind "/" { SwitchToMode "entersearch"; SearchInput 0; }
+        bind "s" { SwitchToMode "entersearch"; SearchInput 0; }
+        bind "esc" { ScrollToBottom; SwitchToMode "normal"; }
+        bind "q" { ScrollToBottom; SwitchToMode "normal"; }
+        bind "enter" { SwitchToMode "normal"; }
+    }
+
+    search {
+        bind "j" { ScrollDown; }
+        bind "k" { ScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+        bind "n" { Search "down"; }
+        bind "N" { Search "up"; }
+        bind "c" { SearchToggleOption "CaseSensitivity"; }
+        bind "w" { SearchToggleOption "Wrap"; }
+        bind "o" { SearchToggleOption "WholeWord"; }
+        bind "esc" { ScrollToBottom; SwitchToMode "normal"; }
+        bind "q" { ScrollToBottom; SwitchToMode "normal"; }
+    }
+
+    entersearch {
+        bind "enter" { SwitchToMode "search"; }
+        bind "esc" { SwitchToMode "scroll"; }
+        bind "Ctrl c" { SwitchToMode "scroll"; }
+    }
+
+    renametab {
+        bind "enter" { SwitchToMode "normal"; }
+        bind "esc" { UndoRenameTab; SwitchToMode "normal"; }
+    }
+
+    renamepane {
+        bind "enter" { SwitchToMode "normal"; }
+        bind "esc" { UndoRenamePane; SwitchToMode "normal"; }
+    }
+}
+
+plugins {
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
+    status-bar location="zellij:status-bar"
+    tab-bar location="zellij:tab-bar"
+    filepicker location="zellij:strider"
+    configuration location="zellij:configuration"
+    plugin-manager location="zellij:plugin-manager"
+    about location="zellij:about"
+}
+
+// Dracula palette (matches your tmux dracula theme); `green` doubles as the
+// focused-pane frame color in zellij, set to your #cdc1ff accent.
+themes {
+    dracula-max {
+        fg "#F8F8F2"
+        bg "#44475A"
+        black "#282A36"
+        red "#FF5555"
+        green "#CDC1FF"
+        yellow "#F1FA8C"
+        blue "#BD93F9"
+        magenta "#FF79C6"
+        cyan "#8BE9FD"
+        white "#F8F8F2"
+        orange "#FFB86C"
+    }
+}
+theme "dracula-max"
+
+// single zjstatus bar at the BOTTOM with tabs + BG/weather/time widgets
+// (see ~/.config/zellij/layouts/dracula.kdl)
+default_layout "dracula"
+
+default_shell "fish"
+default_mode "normal"
+
+// tmux: set -g history-limit 50000
+scroll_buffer_size 50000
+
+// tmux: set -g mouse on; WheelUp enters copy mode automatically in zellij too
+mouse_mode true
+
+// OSC52 clipboard, like your osc52-copy.sh / set-clipboard on.
+// Selection is mouse-driven: drag to select, released selection is copied.
+copy_on_select true
+
+// no frame borders around panes (tmux-style; zjstatus bar still shows focus
+// via the tab highlight, and the theme's #cdc1ff border only mattered with frames)
+pane_frames false
+
+show_startup_tips false
+show_release_notes false

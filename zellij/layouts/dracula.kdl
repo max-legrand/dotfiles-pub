@@ -1,0 +1,75 @@
+// Default layout: panes on top, single zjstatus bar at the BOTTOM
+// (tabs left; BG / weather / date-time right — mirrors the tmux dracula bar
+//  with @dracula-plugins "dexcom weather time")
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+                // left: mode indicator + session name (dracula show-left-icon "session") + tabs
+                format_left   "{mode}#[fg=#282A36,bg=#BD93F9,bold] {session} {tabs}"
+                // right: BG, weather, time — same order as dracula "dexcom weather time"
+                // ({command_caser} renders nothing — it's the auto-uppercase hook)
+                format_right  "{command_caser}{command_bg}{command_weather}{datetime}"
+                format_space  "#[bg=#282A36]"
+                format_hide_on_overlength "true"
+                format_precedence "rlc"
+
+                border_enabled  "false"
+                hide_frame_for_single_pane "false"
+
+                mode_normal        "#[fg=#282A36,bg=#CDC1FF,bold] N "
+                mode_tmux          "#[fg=#282A36,bg=#FF79C6,bold] ^SPC "
+                mode_locked        "#[fg=#F8F8F2,bg=#FF5555,bold] LOCK "
+                mode_scroll        "#[fg=#282A36,bg=#F1FA8C,bold] COPY "
+                mode_search        "#[fg=#282A36,bg=#F1FA8C,bold] SRCH "
+                mode_enter_search  "#[fg=#282A36,bg=#F1FA8C,bold] SRCH "
+                mode_rename_tab    "#[fg=#282A36,bg=#50FA7B,bold] REN "
+                mode_rename_pane   "#[fg=#282A36,bg=#50FA7B,bold] REN "
+                mode_default_to_mode "normal"
+
+                tab_normal   "#[fg=#F8F8F2,bg=#44475A] {index} {name} "
+                tab_active   "#[fg=#282A36,bg=#CDC1FF,bold] {index} {name} "
+                tab_separator " "
+
+                // auto-uppercase session/tab names (tmux rename-hook analog);
+                // renders nothing in the bar
+                command_caser_command    "bash /home/max/.config/zellij/widgets/uppercase.sh"
+                command_caser_format     ""
+                command_caser_interval   "2"
+                command_caser_rendermode "static"
+
+                // blood glucose (dexcom), same colors as the date/time section
+                command_bg_command    "bash /home/max/.config/zellij/widgets/bg.sh"
+                command_bg_format     "#[fg=#F8F8F2,bg=#44475A,bold] {stdout} "
+                command_bg_interval   "60"
+                command_bg_rendermode "static"
+
+                // weather: light_purple bg / dark_gray fg (dracula weather-colors)
+                command_weather_command    "bash /home/max/.config/zellij/widgets/weather.sh"
+                command_weather_format     "#[fg=#282A36,bg=#CDC1FF] {stdout} "
+                command_weather_interval   "600"
+                command_weather_rendermode "static"
+
+                // tmux: @dracula-time-format "%m/%d(%a) %-I:%M%p", 12h clock
+                datetime          "#[fg=#F8F8F2,bg=#44475A] {format} "
+                datetime_format   "%m/%d(%a) %-I:%M%p"
+                datetime_timezone "America/New_York"
+            }
+        }
+    }
+
+    // Floating "popup" size: no pane is pre-spawned (so nothing flashes at
+    // startup) — when Ctrl+f creates the first floating pane in a tab, it
+    // takes its geometry from this swap layout instead of zellij's 50% default.
+    swap_floating_layout {
+        floating_panes {
+            pane {
+                x "5%"
+                y "5%"
+                width "90%"
+                height "90%"
+            }
+        }
+    }
+}
