@@ -1,0 +1,179 @@
+# yazi theme matching the `minimal` nvim colorscheme
+# (see ~/.config/nvim/lua/theme/minimal.lua for the source palette)
+#:schema https://yazi-rs.github.io/schemas/theme.json
+
+[flavor]
+dark = ""
+light = ""
+
+[app]
+overall = { bg = "#22212C", fg = "#DDDDDD" }
+
+[mgr]
+cwd = { fg = "#CDC1FF", bold = true }
+
+# Find
+find_keyword  = { fg = "#D6C5A5", bg = "#403347", bold = true }
+find_position = { fg = "#A8A8A8", bg = "reset", bold = true }
+
+# Symlink
+symlink_target = { italic = true }
+
+# Marker
+marker_copied   = { fg = "#00FFAA", bg = "#00FFAA" }
+marker_cut      = { fg = "#ED91B1", bg = "#ED91B1" }
+marker_marked   = { fg = "#CDC1FF", bg = "#CDC1FF" }
+marker_selected = { fg = "#555555", bg = "#555555" }
+marker_symbol   = "│"
+
+# Count
+count_copied   = { fg = "#22212C", bg = "#00FFAA" }
+count_cut      = { fg = "#22212C", bg = "#ED91B1" }
+count_selected = { fg = "#22212C", bg = "#CDC1FF" }
+
+# Border
+border_symbol = "│"
+border_style  = { fg = "#888888" }
+
+# Highlighting
+syntect_theme = ""
+
+[tabs]
+active   = { fg = "#DDDDDD", bg = "#403347", bold = true }
+inactive = { fg = "#A8A8A8", bg = "#22212C" }
+
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+[mode]
+normal_main = { fg = "#22212C", bg = "#CDC1FF", bold = true }
+normal_alt  = { fg = "#CDC1FF", bg = "#403347" }
+
+select_main = { fg = "#22212C", bg = "#00FFAA", bold = true }
+select_alt  = { fg = "#00FFAA", bg = "#403347" }
+
+unset_main = { fg = "#22212C", bg = "#ED91B1", bold = true }
+unset_alt  = { fg = "#ED91B1", bg = "#403347" }
+
+[indicator]
+parent  = { reversed = true }
+current = { reversed = true }
+preview = { underline = true }
+padding = { open = "", close = "" }
+
+[status]
+overall   = { fg = "#DDDDDD", bg = "#2B2A37" }
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+# Permissions
+perm_sep   = { fg = "#888888" }
+perm_type  = { fg = "#CDC1FF" }
+perm_read  = { fg = "#00FFAA" }
+perm_write = { fg = "#ED91B1" }
+perm_exec  = { fg = "#D6C5A5" }
+
+# Progress
+progress_label  = { fg = "#DDDDDD", bold = true }
+progress_normal = { fg = "#00FFAA", bg = "#22212C" }
+progress_error  = { fg = "#ED91B1", bg = "#22212C" }
+
+[which]
+cols            = 2
+mask            = { bg = "#22212C" }
+cand            = { fg = "#00FFAA", bold = true }
+rest            = { fg = "#A8A8A8" }
+desc            = { fg = "#888888" }
+separator       = " -> "
+separator_style = { fg = "#888888" }
+
+[confirm]
+border     = { fg = "#888888" }
+title      = { fg = "#CDC1FF", bold = true }
+body       = { fg = "#DDDDDD" }
+list       = { fg = "#DDDDDD" }
+btn_yes    = { fg = "#22212C", bg = "#00FFAA", bold = true }
+btn_no     = { fg = "#DDDDDD", bg = "#403347" }
+btn_labels = [ "  [Y]es  ", "  (N)o  " ]
+
+[spot]
+border = { fg = "#888888" }
+title  = { fg = "#CDC1FF", bold = true }
+
+tbl_col  = { fg = "#CDC1FF" }
+tbl_cell = { fg = "#D6C5A5", reversed = true }
+
+[notify]
+title_info  = { fg = "#00FFAA" }
+title_warn  = { fg = "#D6C5A5" }
+title_error = { fg = "#ED91B1" }
+
+icon_info  = "ℹ"
+icon_warn  = "⚠"
+icon_error = "⛔"
+
+[pick]
+border   = { fg = "#888888" }
+active   = { fg = "#00FFAA", bold = true }
+inactive = { fg = "#DDDDDD" }
+
+[input]
+border   = { fg = "#888888" }
+title    = { fg = "#CDC1FF", bold = true }
+value    = { fg = "#DDDDDD" }
+selected = { fg = "#00FFAA", bold = true }
+
+[cmp]
+border   = { fg = "#888888" }
+active   = { fg = "#00FFAA", bold = true }
+inactive = { fg = "#DDDDDD" }
+
+icon_file    = " "
+icon_folder  = " "
+icon_command = " "
+
+[tasks]
+border  = { fg = "#888888" }
+title   = { fg = "#CDC1FF", bold = true }
+hovered = { fg = "#00FFAA", bold = true }
+
+[help]
+on      = { fg = "#CDC1FF", bold = true }
+run     = { fg = "#00FFAA" }
+desc    = { fg = "#A8A8A8" }
+hovered = { fg = "#00FFAA", bold = true }
+footer  = { fg = "#DDDDDD", bg = "#2B2A37" }
+
+[filetype]
+rules = [
+	# Images
+	{ mime = "image/*", fg = "#D6C5A5" },
+
+	# Videos / audio
+	{ mime = "{audio,video}/*", fg = "#CDC1FF" },
+
+	# Empty files
+	{ mime = "inode/empty", fg = "#A8A8A8" },
+
+	# Orphan symbolic links
+	{ url = "*", is = "orphan", fg = "#ED91B1" },
+
+	# Executables
+	{ url = "*", is = "exec", fg = "#00FFAA" },
+
+	# Directories
+	{ url = "*/", fg = "#CDC1FF" },
+]
+
+[icon]
+# Keep the lists empty so the fallback conditions below provide a consistent icon.
+globs = []
+dirs = []
+files = []
+exts = []
+conds = [
+	{ if = "dir", text = "", fg = "#CDC1FF" },
+	{ if = "exec", text = "", fg = "#00FFAA" },
+	{ if = "!dir", text = "", fg = "#888888" },
+]
+

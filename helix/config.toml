@@ -1,0 +1,128 @@
+# Helix config styled after ~/.config/nvim (lua/config/options.lua,
+# lua/config/keymaps.lua, lua/plugins/colorscheme.lua). This is evil-helix,
+# which brings vim-like keybindings on top of Helix's selection model, so
+# not every nvim mapping has a literal analogue -- the goal here is to match
+# the *spirit* (leader = space, jj to escape, centered scrolling, relative
+# numbers, clipboard-first yank/paste, etc.) rather than byte-for-byte keys.
+#
+# Note: this Helix build only accepts typable `":command"` strings up to two
+# key levels deep (e.g. top-level or one level under `space`); anything
+# nested deeper has to use a named command instead, so a few of the original
+# 3-key <leader> sequences got flattened to 2-key ones below.
+
+theme = "minimal"
+
+[editor]
+line-number = "relative"       # opt.number + opt.relativenumber
+cursorline = true              # opt.cursorline
+mouse = true                   # opt.mouse = "a"
+true-color = true              # opt.termguicolors
+scrolloff = 8                  # opt.scrolloff
+color-modes = true
+bufferline = "multiple"
+rulers = []
+idle-timeout = 250
+completion-timeout = 250
+auto-completion = true
+auto-format = true
+auto-save = false
+undercurl = true
+default-line-ending = "lf"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator"]
+center = []
+right = ["diagnostics", "selections", "register", "position", "file-encoding"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true     # vim.lsp.inlay_hint.enable(true, {})
+auto-signature-help = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+
+[editor.indent-guides]
+render = true
+character = "│"
+
+[editor.whitespace]
+render = { space = "none", tab = "all", newline = "none", nbsp = "all" }
+
+[editor.whitespace.characters]
+tab = "»"       # opt.listchars tab = "» "
+tabpad = " "
+space = "·"
+nbsp = "␣"      # opt.listchars nbsp = "␣"
+newline = "↲"   # opt.listchars eol = "↲"
+
+[editor.search]
+smart-case = true              # opt.ignorecase + opt.smartcase
+wrap-around = true
+
+[editor.gutters]
+layout = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
+
+[editor.soft-wrap]
+enable = false                  # opt.wrap = false
+
+# ---------------------------------------------------------------------------
+# Keymaps -- mirrors the intent of lua/config/keymaps.lua
+# ---------------------------------------------------------------------------
+
+[keys.insert]
+# jj to escape (vim.keymap.set("i", "jj", "<Esc>"))
+j = { j = "normal_mode" }
+
+[keys.normal]
+# H/L jump to first-nonwhitespace / end of line (g^ / g$)
+H = "goto_first_nonwhitespace"
+L = "goto_line_end"
+
+# J/K: half-page scroll, keep cursor centered (mirrors the final
+# <C-d>/<C-u> zz remaps in keymaps.lua, which win over the earlier
+# "move lines" J/K bindings)
+J = ["half_page_down", "align_view_center"]
+K = ["half_page_up", "align_view_center"]
+"C-d" = ["half_page_down", "align_view_center"]
+"C-u" = ["half_page_up", "align_view_center"]
+
+# n/N keep search matches centered (nzzzv / Nzzzv)
+n = ["search_next", "align_view_center"]
+N = ["search_prev", "align_view_center"]
+
+[keys.normal.space]
+# leader key = space, mirroring nvim's <leader> map as closely as helix's
+# command set + keymap nesting limits allow
+w = ":write"                            # <leader>m / <leader>fw -> write
+Q = ":quit"                             # <leader>Q  -> :quit
+x = ":buffer-close"                     # <leader>X  -> :bd
+R = ":reload"                           # <leader>R  -> :edit (reload from disk)
+L = ":lsp-restart"                      # <leader>lr -> :lsp restart
+g = ":sh git status"                    # <leader>gs -> git status (swap for your VCS command of choice)
+y = "yank_main_selection_to_clipboard"  # <leader>y  -> "+y
+d = "delete_selection"                  # <leader>d  -> "+d
+f = "format_selections"                 # <leader>fm -> vim.lsp.buf.format
+o = "symbol_picker"                     # <leader>o  -> workspace symbols
+p = "file_picker"                       # <leader>pv -> Oil-like file tree/picker
+a = "code_action"                       # <leader>ca -> code actions
+# (no <leader>cH here: Helix's search-match highlight is transient, so there's no persistent highlight to clear)
+
+[keys.normal.space.r]
+n = "rename_symbol"                     # <leader>rn -> rename
+r = "goto_reference"                    # <leader>rr -> references
+
+[keys.select]
+H = "goto_first_nonwhitespace"
+L = "goto_line_end"
+J = ["half_page_down", "align_view_center"]
+K = ["half_page_up", "align_view_center"]

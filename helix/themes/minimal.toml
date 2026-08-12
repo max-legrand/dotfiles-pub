@@ -1,0 +1,144 @@
+# "minimal" — a Helix port of the custom zenbones-based `minimal` colorscheme
+# used in ~/.config/nvim (see lua/theme/minimal.lua). Dark variant only.
+
+"ui.background" = { bg = "bg" }
+"ui.text" = { fg = "fg" }
+"ui.text.focus" = { fg = "fg", modifiers = ["bold"] }
+"ui.text.inactive" = { fg = "gray" }
+
+"ui.cursor" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.cursor.primary" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.cursor.match" = { fg = "red", modifiers = ["bold", "underlined"] }
+"ui.cursor.insert" = { fg = "bg", bg = "green" }
+"ui.cursor.select" = { fg = "bg", bg = "green" }
+
+"ui.selection" = { bg = "selection" }
+"ui.selection.primary" = { bg = "selection" }
+
+"ui.linenr" = { fg = "gray", bg = "bg" }
+"ui.linenr.selected" = { fg = "fg", bg = "bg", modifiers = ["bold"] }
+
+"ui.statusline" = { fg = "fg", bg = "statusbg" }
+"ui.statusline.inactive" = { fg = "gray", bg = "bg" }
+"ui.statusline.normal" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.statusline.insert" = { fg = "bg", bg = "green", modifiers = ["bold"] }
+"ui.statusline.select" = { fg = "bg", bg = "red", modifiers = ["bold"] }
+"ui.statusline.separator" = { fg = "gray" }
+
+"ui.bufferline" = { fg = "gray", bg = "bg" }
+"ui.bufferline.active" = { fg = "fg", bg = "statusbg", modifiers = ["bold"] }
+"ui.bufferline.background" = { bg = "bg" }
+
+"ui.popup" = { fg = "fg", bg = "statusbg" }
+"ui.popup.info" = { fg = "fg", bg = "statusbg" }
+"ui.window" = { fg = "gray" }
+"ui.help" = { fg = "fg", bg = "statusbg" }
+
+"ui.menu" = { fg = "fg", bg = "statusbg" }
+"ui.menu.selected" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.menu.scroll" = { fg = "gray", bg = "statusbg" }
+
+"ui.gutter" = { bg = "bg" }
+"ui.gutter.selected" = { bg = "bg" }
+
+"ui.virtual.ruler" = { bg = "statusbg" }
+"ui.virtual.whitespace" = { fg = "gray" }
+"ui.virtual.indent-guide" = { fg = "guide" }
+"ui.virtual.inlay-hint" = { fg = "inlay" }
+"ui.virtual.jump-label" = { fg = "red", modifiers = ["bold"] }
+"ui.virtual.wrap" = { fg = "gray" }
+
+"ui.highlight" = { bg = "selection" }
+"ui.highlight.frameline" = { bg = "selection" }
+
+"ui.cursorline.primary" = { bg = "cursorline" }
+"ui.cursorline.secondary" = { bg = "cursorline" }
+"ui.cursorcolumn.primary" = { bg = "cursorline" }
+
+"ui.debug.breakpoint" = { fg = "red" }
+"ui.debug.active" = { fg = "yellow" }
+
+special = { fg = "pink" }
+label = { fg = "pink", modifiers = ["underlined"] }
+
+comment = { fg = "gray" }
+"comment.line.documentation" = { fg = "gray", modifiers = ["italic"] }
+"comment.block.documentation" = { fg = "gray", modifiers = ["italic"] }
+
+"punctuation" = { fg = "gray" }
+"punctuation.delimiter" = { fg = "gray" }
+"punctuation.bracket" = { fg = "gray" }
+"punctuation.special" = { fg = "pink" }
+
+variable = { fg = "fg" }
+"variable.builtin" = { fg = "pink", modifiers = ["bold"] }
+"variable.parameter" = { fg = "fg" }
+"variable.other.member" = { fg = "string" }
+
+constant = { fg = "gray" }
+"constant.builtin" = { fg = "pink", modifiers = ["bold"] }
+"constant.character.escape" = { fg = "string", modifiers = ["bold"] }
+"constant.numeric" = { fg = "yellow" }
+
+string = { fg = "string" }
+"string.regexp" = { fg = "string" }
+"string.special" = { fg = "yellow" }
+
+type = { fg = "pink", modifiers = ["italic"] }
+"type.builtin" = { fg = "pink", modifiers = ["bold", "italic"] }
+"type.enum.variant" = { fg = "pink" }
+
+function = { fg = "pink" }
+"function.builtin" = { fg = "pink", modifiers = ["bold"] }
+"function.macro" = { fg = "yellow", modifiers = ["bold"] }
+"function.method" = { fg = "pink" }
+
+keyword = { fg = "pink", modifiers = ["bold"] }
+"keyword.control" = { fg = "pink", modifiers = ["bold"] }
+"keyword.storage-class" = { fg = "pink", modifiers = ["bold"] }
+"keyword.directive" = { fg = "gray" }
+
+operator = { fg = "gray" }
+
+namespace = { fg = "pink" }
+attribute = { fg = "yellow" }
+tag = { fg = "pink" }
+
+"markup.heading" = { fg = "pink", modifiers = ["bold"] }
+"markup.list" = { fg = "gray" }
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.link.url" = { fg = "green", modifiers = ["underlined"] }
+"markup.link.text" = { fg = "pink" }
+"markup.quote" = { fg = "gray", modifiers = ["italic"] }
+"markup.raw" = { fg = "string" }
+
+"diff.plus" = { fg = "green" }
+"diff.minus" = { fg = "red" }
+"diff.delta" = { fg = "yellow" }
+
+"diagnostic.error" = { modifiers = ["underlined"], underline = { color = "red", style = "curl" } }
+"diagnostic.warning" = { modifiers = ["underlined"], underline = { color = "yellow", style = "curl" } }
+"diagnostic.info" = { modifiers = ["underlined"], underline = { color = "green", style = "curl" } }
+"diagnostic.hint" = { modifiers = ["underlined"], underline = { color = "inlay", style = "curl" } }
+
+error = { fg = "red" }
+warning = { fg = "yellow" }
+info = { fg = "green" }
+hint = { fg = "inlay" }
+
+[palette]
+bg = "#22212C"
+fg = "#dddddd"
+pink = "#CDC1FF"
+gray = "#888888"
+green = "#00ffaa"
+darkgreen = "#00e699"
+yellow = "#d6c5a5"
+string = "#FFDCCC"
+red = "#ed91b1"
+inlay = "#e0d4ef"
+statusbg = "#2b2a37"
+selection = "#403347"
+cursorline = "#2c2b3a"
+guide = "#39384a"
