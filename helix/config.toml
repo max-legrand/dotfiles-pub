@@ -103,11 +103,10 @@ N = ["search_prev", "align_view_center"]
 [keys.normal.space]
 # leader key = space, mirroring nvim's <leader> map as closely as helix's
 # command set + keymap nesting limits allow
-w = ":write"                            # <leader>m / <leader>fw -> write
+m = ":write"                            # <leader>m -> write
 Q = ":quit"                             # <leader>Q  -> :quit
 x = ":buffer-close"                     # <leader>X  -> :bd
 R = ":reload"                           # <leader>R  -> :edit (reload from disk)
-L = ":lsp-restart"                      # <leader>lr -> :lsp restart
 g = ":sh git status"                    # <leader>gs -> git status (swap for your VCS command of choice)
 y = "yank_main_selection_to_clipboard"  # <leader>y  -> "+y
 d = "delete_selection"                  # <leader>d  -> "+d

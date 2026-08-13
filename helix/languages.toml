@@ -1,0 +1,207 @@
+# Language servers mirrored from ~/.config/nvim.
+# Project-local languages.toml files can still override these settings.
+
+[language-server.lua-language-server]
+command = "/run/current-system/sw/bin/lua-language-server"
+
+[language-server.lua-language-server.config.Lua]
+runtime.version = "LuaJIT"
+diagnostics.globals = ["vim"]
+hint.enable = true
+hint.arrayIndex = "Enable"
+hint.setType = true
+hint.paramName = "All"
+hint.paramType = true
+hint.await = true
+
+[language-server.rust-analyzer]
+command = "rustup"
+args = ["run", "stable", "rust-analyzer"]
+
+[language-server.rust-analyzer.config]
+inlayHints.bindingModeHints.enable = false
+inlayHints.closingBraceHints.minLines = 10
+inlayHints.closureReturnTypeHints.enable = "with_block"
+inlayHints.discriminantHints.enable = "fieldless"
+inlayHints.lifetimeElisionHints.enable = "skip_trivial"
+inlayHints.typeHints.hideClosureInitialization = false
+
+[language-server.rust-analyzer.config.files]
+watcher = "server"
+
+[language-server.ty]
+command = "/Users/max/.local/bin/ty"
+args = ["server"]
+
+[language-server.pyrefly]
+command = "/Users/max/.local/bin/pyrefly"
+args = ["lsp"]
+
+[language-server.typescript-language-server]
+command = "/Users/max/.npm-global/bin/typescript-language-server"
+args = ["--stdio"]
+config.hostInfo = "helix"
+
+[language-server.typescript-language-server.config.typescript.inlayHints]
+includeInlayEnumMemberValueHints = true
+includeInlayFunctionLikeReturnTypeHints = true
+includeInlayFunctionParameterTypeHints = true
+includeInlayParameterNameHints = "all"
+includeInlayParameterNameHintsWhenArgumentMatchesName = true
+includeInlayPropertyDeclarationTypeHints = true
+includeInlayVariableTypeHints = true
+
+[language-server.typescript-language-server.config.javascript.inlayHints]
+includeInlayEnumMemberValueHints = true
+includeInlayFunctionLikeReturnTypeHints = true
+includeInlayFunctionParameterTypeHints = true
+includeInlayParameterNameHints = "all"
+includeInlayParameterNameHintsWhenArgumentMatchesName = true
+includeInlayPropertyDeclarationTypeHints = true
+includeInlayVariableTypeHints = true
+
+[language-server.tailwindcss-ls]
+command = "/Users/max/.npm-global/bin/tailwindcss-language-server"
+args = ["--stdio"]
+
+[language-server.tailwindcss-ls.config.tailwindCSS]
+includeLanguages = { ripple = "typescriptreact" }
+
+[language-server.svelteserver]
+command = "/Users/max/.npm-global/bin/svelteserver"
+args = ["--stdio"]
+
+[language-server.svelteserver.config.configuration.typescript.inlayHints]
+parameterTypes.enabled = true
+variableTypes.enabled = true
+propertyDeclarationTypes.enabled = true
+functionLikeReturnTypes.enabled = true
+enumMemberValues.enabled = true
+parameterNames.enabled = "all"
+
+[language-server.svelteserver.config.configuration.javascript.inlayHints]
+parameterTypes.enabled = true
+variableTypes.enabled = true
+propertyDeclarationTypes.enabled = true
+functionLikeReturnTypes.enabled = true
+enumMemberValues.enabled = true
+parameterNames.enabled = "all"
+
+[language-server.zls]
+command = "/Users/max/bin/zls"
+
+[language-server.clangd]
+command = "/usr/bin/clangd"
+args = ["--background-index", "--query-driver=/usr/bin/clang++,/usr/bin/clang,/opt/homebrew/bin/clang++,/opt/homebrew/bin/clang"]
+
+[language-server.gopls]
+command = "/Users/max/.local/share/nvim/mason/bin/gopls"
+
+[language-server.gopls.config.hints]
+assignVariableTypes = true
+compositeLiteralFields = true
+constantValues = true
+functionTypeParameters = true
+parameterNames = true
+rangeVariableTypes = true
+
+[language-server.ocamllsp]
+command = "/Users/max/.opam/5.3.0/bin/ocamllsp"
+
+[language-server.sourcekit-lsp]
+command = "/usr/bin/sourcekit-lsp"
+
+[language-server.vscode-json-language-server]
+command = "/Users/max/.local/share/nvim/mason/bin/vscode-json-language-server"
+args = ["--stdio"]
+config = { provideFormatter = true, json = { validate = { enable = true } } }
+
+[language-server.vscode-css-language-server]
+command = "/Users/max/.local/share/nvim/mason/bin/vscode-css-language-server"
+args = ["--stdio"]
+config = { provideFormatter = true, css = { validate = { enable = true } } }
+
+[language-server.vscode-html-language-server]
+command = "/Users/max/.local/share/nvim/mason/bin/vscode-html-language-server"
+args = ["--stdio"]
+config = { provideFormatter = true }
+
+# Use the real TypeScript LSP for TS/TSX rather than nvim's optional tsgo command.
+# This is the important fix for .tsx buffers: Helix's language id is
+# "typescriptreact", which typescript-language-server understands.
+[[language]]
+name = "javascript"
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "jsx"
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "typescript"
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "tsx"
+language-servers = ["typescript-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "html"
+language-servers = ["vscode-html-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "css"
+language-servers = ["vscode-css-language-server", "tailwindcss-ls"]
+
+[[language]]
+name = "json"
+language-servers = ["vscode-json-language-server"]
+
+[[language]]
+name = "jsonc"
+language-servers = ["vscode-json-language-server"]
+
+[[language]]
+name = "svelte"
+language-servers = ["svelteserver", "tailwindcss-ls"]
+
+[[language]]
+name = "lua"
+language-servers = ["lua-language-server"]
+formatter = { command = "/opt/homebrew/bin/stylua", args = ["-"] }
+
+[[language]]
+name = "rust"
+language-servers = ["rust-analyzer"]
+
+[[language]]
+name = "python"
+language-servers = ["ty", "pyrefly"]
+
+[[language]]
+name = "go"
+language-servers = ["gopls"]
+
+[[language]]
+name = "c"
+language-servers = ["clangd"]
+
+[[language]]
+name = "cpp"
+language-servers = ["clangd"]
+
+[[language]]
+name = "ocaml"
+language-servers = ["ocamllsp"]
+
+[[language]]
+name = "ocaml-interface"
+language-servers = ["ocamllsp"]
+
+[[language]]
+name = "swift"
+language-servers = ["sourcekit-lsp"]
+
+[[language]]
+name = "zig"
+language-servers = ["zls"]

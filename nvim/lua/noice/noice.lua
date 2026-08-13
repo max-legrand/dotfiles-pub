@@ -1,21 +1,9 @@
-vim.pack.add({ "https://github.com/rcarriga/nvim-notify" })
+-- Notifications are owned by Snacks' notifier (lua/snacks/snacks.lua), not
+-- nvim-notify: noice's "notify" view (used below for msg_showmode) is a
+-- thin wrapper around `vim.notify`, so it renders through whatever
+-- vim.notify is bound to. Running nvim-notify here too just meant two
+-- notification backends fighting over vim.notify.
 vim.pack.add({ "https://github.com/folke/noice.nvim" })
-require("notify").setup({
-	background_colour = "#111111",
-	timeout = 1500,
-	fps = 10,
-	stages = "static",
-	render = "compact",
-	-- stages = vim.list_extend({
-	-- 	function(state)
-	-- 		if #state.open_windows >= 3 then
-	-- 			return nil
-	-- 		end
-	-- 		return stages[1](state)
-	-- 	end,
-	-- }, vim.list_slice(stages, 2, #stages)),
-})
-
 require("noice").setup({
 	routes = {
 		{
