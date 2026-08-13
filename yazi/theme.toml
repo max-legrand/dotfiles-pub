@@ -7,7 +7,7 @@ dark = ""
 light = ""
 
 [app]
-overall = { bg = "#22212C", fg = "#DDDDDD" }
+overall = { bg = "none", fg = "#DDDDDD" }
 
 [mgr]
 cwd = { fg = "#CDC1FF", bold = true }

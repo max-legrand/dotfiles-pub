@@ -1,7 +1,7 @@
 # "minimal" — a Helix port of the custom zenbones-based `minimal` colorscheme
 # used in ~/.config/nvim (see lua/theme/minimal.lua). Dark variant only.
 
-"ui.background" = { bg = "bg" }
+"ui.background" = {}
 "ui.text" = { fg = "fg" }
 "ui.text.focus" = { fg = "fg", modifiers = ["bold"] }
 "ui.text.inactive" = { fg = "gray" }
