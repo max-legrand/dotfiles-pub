@@ -3,7 +3,8 @@
 -- thin wrapper around `vim.notify`, so it renders through whatever
 -- vim.notify is bound to. Running nvim-notify here too just meant two
 -- notification backends fighting over vim.notify.
-vim.pack.add({ "https://github.com/folke/noice.nvim" })
+--
+-- The plugin itself is installed by lazy (see lua/plugins.lua).
 require("noice").setup({
 	routes = {
 		{

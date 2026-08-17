@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/j-hui/fidget.nvim" })
 require("fidget").setup({
 	notification = {
 		poll_rate = 100,
@@ -7,8 +6,6 @@ require("fidget").setup({
 		},
 	},
 })
-
-vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
 -- Deduplicate diagnostics (workaround for ZLS sending duplicates)
 local orig_handler = vim.lsp.handlers["textDocument/publishDiagnostics"]

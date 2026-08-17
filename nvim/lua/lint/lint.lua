@@ -1,4 +1,3 @@
-vim.pack.add({ "https://github.com/mfussenegger/nvim-lint" })
 local lint = require("lint")
 global_diagnostics = {}
 lint.linters_by_ft = {
