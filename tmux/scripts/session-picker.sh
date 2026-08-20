@@ -1,7 +1,7 @@
 #!/bin/sh
 HL="#CDC1FF"
 selected=$(tmux list-sessions \
-  -f '#{?#{==:#{session_name},__HIDDEN__},0,#{?#{==:#{session_name},popup},0,1}}' \
+  -f '#{?#{==:#{session_name},__HIDDEN__},0,#{?#{==:#{session_name},popup},0,#{?#{m:TABPOPUP_*,#{session_name}},0,#{?#{m:SESSPOPUP_*,#{session_name}},0,1}}}}' \
   -F '#{session_name}' \
   | fzf-tmux -p 50%,40% \
        --layout=default --no-info --no-clear \

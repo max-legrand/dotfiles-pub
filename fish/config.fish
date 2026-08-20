@@ -223,7 +223,7 @@ end
 function tms
     set HL "#CDC1FF"
     set selected (tmux list-sessions \
-        -f '#{?#{==:#{session_name},__HIDDEN__},0,#{?#{==:#{session_name},POPUP},0,1}}' \
+        -f '#{?#{m:TABPOPUP*,#{session_name}},0,#{?#{m:SESSPOPUP*,#{session_name}},0,#{?#{==:#{session_name},__HIDDEN__},0,#{?#{==:#{session_name},POPUP},0,1}}}}' \
         -F '#{session_name}' \
         | sk --tmux center,50%,40% \
              --layout=default --no-info --no-clear \
