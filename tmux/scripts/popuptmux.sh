@@ -11,5 +11,8 @@ else
     fi
     # Disable status bar for the popup session
     tmux set -t popup status off
-    tmux popup -d "$pane_path" -xC -yC -w"$width" -h"$height" -b rounded -E "tmux attach -t popup"
+    tmux set-environment -t popup TMUX_POPUP global
+    # Border title + colour identify which of the three popup scopes this is.
+    tmux popup -d "$pane_path" -xC -yC -w"$width" -h"$height" -b rounded \
+        -S "fg=#ec8fb0" -T " global " -E "tmux attach -t popup"
 fi

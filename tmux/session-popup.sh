@@ -32,10 +32,17 @@ tmux list-sessions -F '#{session_name}' 2>/dev/null | grep '^SESSPOPUP_' | while
 done
 
 if ! tmux has-session -t "=$name" 2>/dev/null; then
-    tmux new-session -d -s "$name" -c "$pane_path"
+    tmux new-session -d -s "$name" -c "$pane_path" -e TMUX_POPUP=session
 fi
 # after-new-session turns the status bar back on; keep it off for popups.
 tmux set-option -t "=$name" status off
+# Also set on existing sessions, not just new ones (see -e above).
+tmux set-environment -t "=$name" TMUX_POPUP session
+
+# Border title + colour identify which of the three popup scopes this is.
+# '#' is a format introducer in titles, so double it in the parent's name.
+title=" session · $(printf '%s' "$session" | sed 's/#/##/g') "
 
 tmux popup -d "$pane_path" -xC -yC -w"$width" -h"$height" -b rounded \
+    -S "fg=#cdc1ff" -T "$title" \
     -E "tmux attach -t '=$name'"
