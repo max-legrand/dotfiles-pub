@@ -1,0 +1,85 @@
+[1m[93mnvim/lua/plugins/snacks.lua[39m[0m[2m --- 1/5 --- Lua[0m
+[2m  1 [0m[2m  1 [0m[1mreturn[0m {
+[2m  2 [0m[2m  2 [0m    {
+[2m  3 [0m[2m  3 [0m        [95m"max-legrand/snacks.nvim"[0m,
+[2m  . [0m[92;1m  4 [0m        [92mdependencies[0m [92;1m=[0m [92;1m{[0m
+[2m  . [0m[92;1m  5 [0m            [92;1m{[0m
+[2m  . [0m[92;1m  6 [0m                [92m"madmaxieee/fff-snacks.nvim",[0m
+[2m  . [0m[92;1m  7 [0m                [92mdependencies[0m [92;1m=[0m [92;1m{[0m
+[2m  . [0m[92;1m  8 [0m                    [92;1m{[0m
+[2m  . [0m[92;1m  9 [0m                        [92m"dmtrKovalenko/fff",[0m
+[2m  . [0m[92;1m 10 [0m                        [92mbuild[0m [92;1m=[0m [92;1mfunction()[0m
+[2m  . [0m[92;1m 11 [0m                            [92mrequire[0m[92;1m([0m[92m"fff.download"[0m[92;1m)[0m[92m.download_or_build_binary[0m[92;1m()[0m
+[2m  . [0m[92;1m 12 [0m                        [92;1mend[0m[92m,[0m
+[2m  . [0m[92;1m 13 [0m                        [92mopts[0m [92;1m=[0m [92;1m{[0m [92menable_home_dir_scanning[0m [92;1m=[0m [92;1mfalse[0m [92;1m}[0m[92m,[0m
+[2m  . [0m[92;1m 14 [0m                    [92;1m}[0m[92m,[0m
+[2m  . [0m[92;1m 15 [0m                [92;1m}[0m[92m,[0m
+[2m  . [0m[92;1m 16 [0m                [92mopts[0m [92;1m=[0m [92;1m{}[0m[92m,[0m
+[2m  . [0m[92;1m 17 [0m            [92;1m}[0m[92m,[0m
+[2m  . [0m[92;1m 18 [0m        [92;1m}[0m[92m,[0m
+[2m  4 [0m[2m 19 [0m        lazy [1m=[0m [1mfalse[0m,
+[2m  5 [0m[2m 20 [0m        priority [1m=[0m 900,
+[2m  6 [0m[2m 21 [0m        config [1m=[0m [1mfunction[0m()
+
+[1mnvim/lua/plugins/snacks.lua[0m[2m --- 2/5 --- Lua[0m
+[2m 59 [0m                {                          [2m 74 [0m                {
+[2m 60 [0m                    [95m"<leader><space>"[0m,     [2m 75 [0m                    [95m"<leader><space>"[0m,
+[2m 61 [0m                    [1mfunction[0m()             [2m 76 [0m                    [1mfunction[0m()
+[91;1m 62 [0m                        [91mSnacks.picker[0m.[91msma[0m  [92;1m 77 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m .. [0m[0m[91mrt[0m()                                       [92;1m[2m .. [0m[0m[92mks"[0m[92;1m)[0m.[92mfind_files[0m()
+[2m 63 [0m                    [1mend[0m,                   [2m 78 [0m                    [1mend[0m,
+[91;1m 64 [0m                    desc [1m=[0m [91m"[0m[91;1;4mSmart[0m[91m Find Fi[0m  [92;1m 79 [0m                    desc [1m=[0m [92m"[0m[92;1;4mFFF[0m[92m Find File[0m
+[91;1m[2m .. [0m[0m[91mles"[0m,                                      [92;1m[2m .. [0m[0m[92ms"[0m,
+[2m 65 [0m                },                         [2m 80 [0m                },
+[2m 66 [0m                {                          [2m 81 [0m                {
+[2m 67 [0m                    [95m"<leader>,"[0m,           [2m 82 [0m                    [95m"<leader>,"[0m,
+
+[1mnvim/lua/plugins/snacks.lua[0m[2m --- 3/5 --- Lua[0m
+[2m 73 [0m                {                          [2m 88 [0m                {
+[2m 74 [0m                    [95m"<leader>/"[0m,           [2m 89 [0m                    [95m"<leader>/"[0m,
+[2m 75 [0m                    [1mfunction[0m()             [2m 90 [0m                    [1mfunction[0m()
+[91;1m 76 [0m                        [91mSnacks.picker[0m.[91mgre[0m  [92;1m 91 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m .. [0m[0m[91mp[0m({ cwd [1m=[0m vim.fn.getcwd() })               [92;1m[2m .. [0m[0m[92mks"[0m[92;1m)[0m.[92mlive_grep[0m({ cwd [1m=[0m vim.fn.getcwd() })
+[2m 77 [0m                    [1mend[0m,                   [2m 92 [0m                    [1mend[0m,
+[2m 78 [0m                    desc [1m=[0m [95m"Grep"[0m,         [2m 93 [0m                    desc [1m=[0m [95m"Grep"[0m,
+[2m 79 [0m                },                         [2m 94 [0m                },
+
+[1mnvim/lua/plugins/snacks.lua[0m[2m --- 4/5 --- Lua[0m
+[2m102 [0m                {                          [2m117 [0m                {
+[2m103 [0m                    [95m"<leader>fc"[0m,          [2m118 [0m                    [95m"<leader>fc"[0m,
+[2m104 [0m                    [1mfunction[0m()             [2m119 [0m                    [1mfunction[0m()
+[91;1m105 [0m                        [91mSnacks.picker[0m.[91mfil[0m  [92;1m120 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m... [0m[0m[91mes[0m({ cwd [1m=[0m vim.fn.stdpath([95m"config"[0m) })     [92;1m[2m... [0m[0m[92mks"[0m[92;1m)[0m.[92mfind_files[0m({ cwd [1m=[0m vim.fn.stdpath([95m"c[0m
+[91;1m[2m... [0m[0m                                           [92;1m[2m... [0m[0m[95monfig"[0m) })
+[2m106 [0m                    [1mend[0m,                   [2m121 [0m                    [1mend[0m,
+[2m107 [0m                    desc [1m=[0m [95m"Find Config F[0m  [2m122 [0m                    desc [1m=[0m [95m"Find Config F[0m
+[2m[2m... [0m[0m[95mile"[0m,                                      [2m[2m... [0m[0m[95mile"[0m,
+[2m108 [0m                },                         [2m123 [0m                },
+[2m109 [0m                {                          [2m124 [0m                {
+[2m110 [0m                    [95m"<leader>ff"[0m,          [2m125 [0m                    [95m"<leader>ff"[0m,
+[2m111 [0m                    [1mfunction[0m()             [2m126 [0m                    [1mfunction[0m()
+[91;1m112 [0m                        [91mSnacks.picker[0m.[91mfil[0m  [92;1m127 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m... [0m[0m[91mes[0m()                                       [92;1m[2m... [0m[0m[92mks"[0m[92;1m)[0m.[92mfind_files[0m()
+[2m113 [0m                    [1mend[0m,                   [2m128 [0m                    [1mend[0m,
+[2m114 [0m                    desc [1m=[0m [95m"Find Files"[0m,   [2m129 [0m                    desc [1m=[0m [95m"Find Files"[0m,
+[2m115 [0m                },                         [2m130 [0m                },
+
+[1mnvim/lua/plugins/snacks.lua[0m[2m --- 5/5 --- Lua[0m
+[2m175 [0m                {                          [2m190 [0m                {
+[2m176 [0m                    [95m"<leader>sg"[0m,          [2m191 [0m                    [95m"<leader>sg"[0m,
+[2m177 [0m                    [1mfunction[0m()             [2m192 [0m                    [1mfunction[0m()
+[91;1m178 [0m                        [91mSnacks.picker[0m.[91mgre[0m  [92;1m193 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m... [0m[0m[91mp[0m({ cwd [1m=[0m vim.fn.getcwd() })               [92;1m[2m... [0m[0m[92mks"[0m[92;1m)[0m.[92mlive_grep[0m({ cwd [1m=[0m vim.fn.getcwd() })
+[2m179 [0m                    [1mend[0m,                   [2m194 [0m                    [1mend[0m,
+[2m180 [0m                    desc [1m=[0m [95m"Grep"[0m,         [2m195 [0m                    desc [1m=[0m [95m"Grep"[0m,
+[2m181 [0m                },                         [2m196 [0m                },
+[2m182 [0m                {                          [2m197 [0m                {
+[2m183 [0m                    [95m"<leader>sw"[0m,          [2m198 [0m                    [95m"<leader>sw"[0m,
+[2m184 [0m                    [1mfunction[0m()             [2m199 [0m                    [1mfunction[0m()
+[91;1m185 [0m                        [91mSnacks.picker[0m.gre  [92;1m200 [0m                        [92mrequire[0m[92;1m([0m[92m"fff-snac[0m
+[91;1m[2m... [0m[0mp_word({ cwd [1m=[0m vim.fn.getcwd() })          [92;1m[2m... [0m[0m[92mks"[0m[92;1m)[0m.grep_word({ cwd [1m=[0m vim.fn.getcwd() })
+[2m186 [0m                    [1mend[0m,                   [2m201 [0m                    [1mend[0m,
+[2m187 [0m                    desc [1m=[0m [95m"Grep word und[0m  [2m202 [0m                    desc [1m=[0m [95m"Grep word und[0m
+[2m[2m... [0m[0m[95mer cursor"[0m,                                [2m[2m... [0m[0m[95mer cursor"[0m,
+[2m188 [0m                    mode [1m=[0m { [95m"n"[0m, [95m"x"[0m },   [2m203 [0m                    mode [1m=[0m { [95m"n"[0m, [95m"x"[0m },
+
