@@ -1,0 +1,81 @@
+Neovim: smoother movement (2 changes)
+=====================================
+
+Both changes stop Neovim from drawing extra frames after each keypress.
+
+
+1. lua/config/keymaps.lua -- J / K / <C-d> / <C-u> scroll in one frame
+-----------------------------------------------------------------------
+
+A plain `<C-d>zz` mapping draws the scrolled screen, then the recentered one,
+so the text jumps twice per press. Running both as one `normal!` draws only
+the final position.
+
+Replace:
+
+    -- Keep cursor in same spot / centered
+    vim.keymap.set("n", "<C-d>", "<C-d>zz")
+    vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+with:
+
+    -- Half-page scroll + recenter in one screen update. As a plain `<C-d>zz`
+    -- mapping Neovim draws the scrolled screen, then the recentered one: the
+    -- text visibly jumps twice per press. One `normal!` draws only the result.
+    local function centered_scroll(key)
+    	return function()
+    		vim.cmd("normal! " .. (vim.v.count > 0 and vim.v.count or "") .. vim.keycode(key) .. "zz")
+    	end
+    end
+
+    -- Keep cursor in same spot / centered
+    vim.keymap.set("n", "<C-d>", centered_scroll("<C-d>"))
+    vim.keymap.set("n", "<C-u>", centered_scroll("<C-u>"))
+
+Then, further down, replace:
+
+    vim.keymap.set("n", "J", "<C-d>zz")
+    vim.keymap.set("n", "K", "<C-u>zz")
+
+with:
+
+    vim.keymap.set("n", "J", centered_scroll("<C-d>"))
+    vim.keymap.set("n", "K", centered_scroll("<C-u>"))
+
+(`centered_scroll` must be defined above the J/K lines.)
+
+
+2. lua/plugins/snacks.lua -- draw the indent scope guide right away
+-------------------------------------------------------------------
+
+Snacks indent waits 30 ms (default) before finding the new scope, so the guide
+is redrawn ~2 frames after every move. Set the delay to 0.
+
+In require("snacks").setup({ ... }), change the `indent` block from:
+
+    indent = {
+    	enabled = true,
+    	animate = { enabled = false },
+    },
+
+to:
+
+    indent = {
+    	enabled = true,
+    	animate = { enabled = false },
+    	-- Find the new scope right away. The default 30 ms delay draws the
+    	-- moved cursor first and the scope guide one or two frames later,
+    	-- so every move or scroll repaints twice.
+    	scope = { debounce = 0 },
+    },
+
+
+Not changed (optional)
+----------------------
+
+lualine refreshes the statusline on a 16 ms timer, so line/column updates one
+frame late. To change it, add to lualine's setup:
+
+    options = { refresh = { refresh_time = 8 } },
+
+(the timer then runs more often all the time).
