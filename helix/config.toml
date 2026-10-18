@@ -10,7 +10,7 @@
 # nested deeper has to use a named command instead, so a few of the original
 # 3-key <leader> sequences got flattened to 2-key ones below.
 
-theme = "minimal"
+theme = "usgc-polyminimal2"
 
 [editor]
 line-number = "relative"       # opt.number + opt.relativenumber
@@ -100,6 +100,13 @@ K = ["half_page_up", "align_view_center"]
 n = ["search_next", "align_view_center"]
 N = ["search_prev", "align_view_center"]
 
+# Always use the system clipboard for yank/paste/delete
+y = "yank_to_clipboard"
+p = "paste_clipboard_after"
+P = "paste_clipboard_before"
+R = "replace_selections_with_clipboard"
+d = ["yank_to_clipboard", "delete_selection"]
+
 [keys.normal.space]
 # leader key = space, mirroring nvim's <leader> map as closely as helix's
 # command set + keymap nesting limits allow
@@ -125,3 +132,8 @@ H = "goto_first_nonwhitespace"
 L = "goto_line_end"
 J = ["half_page_down", "align_view_center"]
 K = ["half_page_up", "align_view_center"]
+y = "yank_to_clipboard"
+p = "paste_clipboard_after"
+P = "paste_clipboard_before"
+R = "replace_selections_with_clipboard"
+d = ["yank_to_clipboard", "delete_selection"]

@@ -88,7 +88,7 @@ enumMemberValues.enabled = true
 parameterNames.enabled = "all"
 
 [language-server.zls]
-command = "/Users/max/bin/zls"
+command = "/Users/max/ml/bin/zls"
 
 [language-server.clangd]
 command = "/usr/bin/clangd"

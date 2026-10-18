@@ -1,0 +1,144 @@
+# Helix port of nvim's `usgc-polyminimal2` (nvim/colors/usgc-polyminimal2.lua).
+
+"ui.background" = {}
+"ui.text" = { fg = "fg" }
+"ui.text.focus" = { fg = "lavender", bg = "cursorline", modifiers = ["bold"] }
+"ui.text.inactive" = { fg = "gray" }
+
+"ui.cursor" = { fg = "bg", bg = "blue" }
+"ui.cursor.primary" = { fg = "bg", bg = "blue" }
+"ui.cursor.match" = { fg = "bg", bg = "red", modifiers = ["bold"] }
+"ui.cursor.insert" = { fg = "bg", bg = "green" }
+"ui.cursor.select" = { fg = "bg", bg = "green" }
+
+"ui.selection" = { fg = "lavender", bg = "cursorline" }
+"ui.selection.primary" = { fg = "lavender", bg = "cursorline" }
+
+"ui.linenr" = { fg = "gray" }
+"ui.linenr.selected" = { fg = "lavender", bg = "cursorline", modifiers = ["bold"] }
+
+"ui.statusline" = { fg = "lavender", bg = "cursorline", modifiers = ["bold"] }
+"ui.statusline.inactive" = { fg = "gray" }
+"ui.statusline.normal" = { fg = "bg", bg = "lavender", modifiers = ["bold"] }
+"ui.statusline.insert" = { fg = "bg", bg = "green", modifiers = ["bold"] }
+"ui.statusline.select" = { fg = "bg", bg = "red", modifiers = ["bold"] }
+"ui.statusline.separator" = { fg = "gray" }
+
+"ui.bufferline" = { fg = "gray" }
+"ui.bufferline.active" = { fg = "lavender", bg = "cursorline", modifiers = ["bold"] }
+"ui.bufferline.background" = {}
+
+"ui.popup" = { fg = "fg" }
+"ui.popup.info" = { fg = "fg" }
+"ui.window" = { fg = "blue" }
+"ui.help" = { fg = "fg" }
+
+"ui.menu" = { fg = "fg" }
+"ui.menu.selected" = { fg = "lavender", bg = "cursorline", modifiers = ["bold"] }
+"ui.menu.scroll" = { fg = "gray" }
+
+"ui.gutter" = {}
+"ui.gutter.selected" = {}
+
+"ui.virtual.ruler" = { bg = "cursorline" }
+"ui.virtual.whitespace" = { fg = "gray" }
+"ui.virtual.indent-guide" = { fg = "guide" }
+"ui.virtual.inlay-hint" = { fg = "inlay" }
+"ui.virtual.jump-label" = { fg = "red", modifiers = ["bold"] }
+"ui.virtual.wrap" = { fg = "gray" }
+
+"ui.highlight" = { bg = "reference" }
+"ui.highlight.frameline" = { bg = "reference" }
+
+"ui.cursorline.primary" = { bg = "cursorline" }
+"ui.cursorline.secondary" = { bg = "cursorline" }
+"ui.cursorcolumn.primary" = { bg = "cursorline" }
+
+"ui.debug.breakpoint" = { fg = "red" }
+"ui.debug.active" = { fg = "yellow" }
+
+special = { fg = "lavender" }
+label = { fg = "lavender", modifiers = ["underlined"] }
+
+comment = { fg = "gray" }
+"comment.line.documentation" = { fg = "gray", modifiers = ["italic"] }
+"comment.block.documentation" = { fg = "gray", modifiers = ["italic"] }
+
+"punctuation" = { fg = "gray" }
+"punctuation.delimiter" = { fg = "gray" }
+"punctuation.bracket" = { fg = "gray" }
+"punctuation.special" = { fg = "lavender" }
+
+variable = { fg = "fg" }
+"variable.builtin" = { fg = "yellow" }
+"variable.parameter" = { fg = "fg" }
+"variable.other.member" = { fg = "blue" }
+
+constant = { fg = "yellow" }
+"constant.builtin" = { fg = "yellow" }
+"constant.builtin.boolean" = { fg = "yellow" }
+"constant.character" = { fg = "string" }
+"constant.character.escape" = { fg = "lavender" }
+"constant.numeric" = { fg = "yellow" }
+
+string = { fg = "string" }
+"string.regexp" = { fg = "string" }
+"string.special" = { fg = "lavender" }
+
+type = { fg = "lavender", modifiers = ["italic"] }
+"type.builtin" = { fg = "lavender", modifiers = ["italic"] }
+"type.enum.variant" = { fg = "lavender" }
+
+function = { fg = "blue" }
+"function.builtin" = { fg = "blue" }
+"function.macro" = { fg = "blue" }
+"function.method" = { fg = "blue" }
+
+keyword = { fg = "blue" }
+"keyword.control" = { fg = "blue", modifiers = ["bold"] }
+"keyword.storage" = { fg = "blue" }
+"keyword.directive" = { fg = "gray" }
+
+operator = { fg = "gray" }
+
+namespace = { fg = "lavender" }
+attribute = { fg = "gray" }
+tag = { fg = "blue" }
+
+"markup.heading" = { fg = "blue", modifiers = ["bold"] }
+"markup.list" = { fg = "gray" }
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.link.url" = { fg = "lavender", modifiers = ["underlined"] }
+"markup.link.text" = { fg = "lavender" }
+"markup.quote" = { fg = "gray", modifiers = ["italic"] }
+"markup.raw" = { fg = "string" }
+
+"diff.plus" = { fg = "green" }
+"diff.minus" = { fg = "red" }
+"diff.delta" = { fg = "yellow" }
+
+"diagnostic.error" = { underline = { color = "red", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "yellow", style = "curl" } }
+"diagnostic.info" = { underline = { color = "green", style = "curl" } }
+"diagnostic.hint" = { underline = { color = "inlay", style = "curl" } }
+
+error = { fg = "red" }
+warning = { fg = "yellow" }
+info = { fg = "green" }
+hint = { fg = "inlay" }
+
+[palette]
+bg = "#22212C"
+fg = "#DDDDDD"
+lavender = "#CDC1FF"
+gray = "#888888"
+green = "#00FFAA"
+yellow = "#f6b40e"
+string = "#FFDCCC"
+red = "#ED91B1"
+inlay = "#E0D4EF"
+blue = "#74acdf"
+cursorline = "#454057"
+reference = "#6E4A66"
+guide = "#39384a"
