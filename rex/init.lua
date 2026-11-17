@@ -14,6 +14,13 @@ local TAB_NAV_ACROSS_SESSIONS = true
 -- Rex's prefix, as a key sequence.
 local p = "ctrl+space>"
 
+-- The Windows app (rex-native 0.1.1) fetches this keymap but never runs it,
+-- and keys bound here can hide the app's own Ctrl shortcuts. On Windows the
+-- keys live in config.ini (native) and rex/rex-prefix.ahk (the prefix), so
+-- bind nothing here. Actions are still defined, for `rex do`.
+local IS_WINDOWS = package.config:sub(1, 1) == "\\"
+if IS_WINDOWS then rex.bind = function() end end
+
 -- == tmux passthrough ========================================================
 -- Rex and tmux want the same keys (Ctrl+Space above all, plus C-hjkl,
 -- C-S-hjkl, M-C-hjkl, C-f). A Rex prefix is a key *sequence*, and a sequence
@@ -116,6 +123,40 @@ local function active_window(view)
   end
 end
 
+-- Apply the local Ghostty-style palette to the focused Rex terminal. The
+-- action is also available from Rex's command palette, which avoids relying
+-- on a prefix sequence while testing key bindings.
+rex.action{
+  name = "apply_usgc_polyminimal_theme",
+  title = "Apply USGC Polyminimal Theme",
+  category = "Appearance",
+  run = function(ctx)
+    local block_id = ctx.block_id
+    if not block_id then
+      local window = active_window(rex.session.view{})
+      block_id = window and window.focused_block_id
+    end
+    if not block_id then return end
+    rex.block.call("com.superlogical.terminal", "set_theme", {
+      block_id = block_id,
+      theme = {
+        background = "#050505",
+        foreground = "#DDDDDD",
+        cursor = "#74acdf",
+        scheme = "dark",
+        palette = {
+          "0=#000000", "1=#EC8FB0", "2=#00FFAA", "3=#f6b40e",
+          "4=#74acdf", "5=#CDC1FF", "6=#7E86B4", "7=#DDDDDD",
+          "8=#403833", "9=#E8838F", "10=#00FFAA", "11=#FFD166",
+          "12=#7AA2FF", "13=#AD99FF", "14=#7E86B4", "15=#A8A8A8",
+        },
+      },
+    })
+  end,
+}
+rb(p .. "shift+y", "apply_usgc_polyminimal_theme")
+rb("ctrl+alt+y", "apply_usgc_polyminimal_theme")
+
 -- Rectangles are stored on layout leaves, not in layer.blocks. Rex currently
 -- reports them as {x, y, w, h} arrays (older views used named fields).
 local function layout_blocks(node, blocks)
@@ -175,7 +216,9 @@ end
 -- Native pane.focus only considers geometry: in A/B | C it can choose A
 -- when moving left from C even if we arrived from B. Remember which pane we
 -- entered from for each return direction, across config reloads as well.
-local FOCUS_STATE = (os.getenv("HOME") or ".") .. "/.config/rex/pane-focus-state.tsv"
+local FOCUS_STATE = IS_WINDOWS
+  and (os.getenv("APPDATA") or ".") .. "\\rex\\pane-focus-state.tsv"
+  or (os.getenv("HOME") or ".") .. "/.config/rex/pane-focus-state.tsv"
 local opposite = { left = "right", right = "left", up = "down", down = "up" }
 
 local function load_focus_state()
@@ -206,6 +249,8 @@ local function save_focus_state(state)
     end
   end
   f:close()
+  -- Windows rename won't replace an existing file.
+  if IS_WINDOWS then os.remove(FOCUS_STATE) end
   local ok, rename_err = os.rename(tmp, FOCUS_STATE)
   if not ok then error(rename_err, 0) end
 end
@@ -738,16 +783,66 @@ local function checked(result, err)
   return result
 end
 
+-- Labels shown in the pane header.
+local FLOAT_LABELS = { session = "Float (session)", tab = "Float (tab)" }
+
+-- Which block is which float lives in a state file ("session" or a
+-- window_id -> block_id) rather than in the label, so labels stay readable.
+-- A hidden tab float is detached and has no window, so the label alone
+-- couldn't tell tabs apart.
+local FLOAT_STATE = FOCUS_STATE:gsub("pane%-focus%-state%.tsv$", "float-state.tsv")
+
+local function load_float_state()
+  local state = {}
+  local f = io.open(FLOAT_STATE, "r")
+  if not f then return state end
+  for line in f:lines() do
+    local key, block = line:match("^([^\t]+)\t([^\t]+)$")
+    if key then state[key] = block end
+  end
+  f:close()
+  return state
+end
+
+local function save_float_state(state)
+  local f, err = io.open(FLOAT_STATE, "w")
+  if not f then error(err, 0) end
+  for key, block in pairs(state) do f:write(key, "\t", block, "\n") end
+  f:close()
+end
+
 local function floating_shell(scope)
   local view = checked(rex.session.view{})
   local win = active_window(view)
   if not win then return end
-  local label = scope == "tab" and "rex.float.tab:" .. win.window_id
-                             or "rex.float.session"
+  local key = scope == "tab" and win.window_id or "session"
+  local label = FLOAT_LABELS[scope]
+  -- Labels used before the state file existed; found once, then relabelled.
+  local old_label = scope == "tab" and "rex.float.tab:" .. win.window_id
+                                 or "rex.float.session"
+  local state = load_float_state()
   local blocks = checked(rex.session.list_blocks{}).blocks or {}
   local target
   for _, b in ipairs(blocks) do
-    if b.label == label then target = b; break end
+    if b.block_id == state[key] then target = b; break end
+  end
+  if not target then
+    for _, b in ipairs(blocks) do
+      if b.label == old_label then target = b; break end
+    end
+  end
+  -- Forget floats of closed tabs and blocks that no longer exist.
+  local alive = {}
+  for _, b in ipairs(blocks) do alive[b.block_id] = true end
+  for k, block in pairs(state) do
+    if not alive[block] then state[k] = nil end
+  end
+  if target then
+    state[key] = target.block_id
+    save_float_state(state)
+    if target.label ~= label then
+      checked(rex.session.set_block_label{ block_id = target.block_id, label = label })
+    end
   end
 
   if target then
@@ -791,6 +886,8 @@ local function floating_shell(scope)
     checked(rex.session.set_block_label{
       block_id = created.block_ids[1], label = label,
     })
+    state[key] = created.block_ids[1]
+    save_float_state(state)
   end
 end
 
@@ -808,3 +905,99 @@ rex.action{
 }
 rb("ctrl+f", "floating_session_shell")
 rb(p .. "f", "floating_tab_shell")
+
+-- == Server-side equivalents (Windows app) ===================================
+-- The Windows tester app doesn't run this file's key bindings, and ignores
+-- client actions (client.tab.new, pane.split, ...) sent from outside it.
+-- These actions do the same jobs through the server API, so they work from
+-- `rex do` - which is how rex/rex-prefix.ahk drives the Ctrl+Space prefix.
+
+local function srv_shell() return rex.layout.block{ flavor = shell } end
+
+local function srv_action(name, title, run, args)
+  rex.action{ name = name, title = title, category = "Server", run = run, args = args }
+end
+
+srv_action("srv_new_tab", "New Tab (Server)", function()
+  checked(rex.session.new_window{ layout = srv_shell() })
+end)
+
+srv_action("srv_next_tab", "Next Tab (Server)", function()
+  checked(rex.session.focus_next_window{ wrap = true })
+end)
+
+srv_action("srv_prev_tab", "Previous Tab (Server)", function()
+  checked(rex.session.focus_previous_window{ wrap = true })
+end)
+
+srv_action("srv_goto_tab", "Go to Tab (Server)", function(_, args)
+  local view = checked(rex.session.view{})
+  local w = (view.windows or {})[args.index]
+  if w then checked(rex.session.focus_window{ window_id = w.window_id }) end
+end, { index = "integer" })
+
+srv_action("srv_close_tab", "Close Tab (Server)", function()
+  local view = checked(rex.session.view{})
+  checked(rex.session.close_window{ window_id = view.active_window_id })
+end)
+
+srv_action("srv_split", "Split Pane (Server)", function(_, args)
+  checked(rex.session.new_split{
+    direction = args.direction == "down" and "vertical" or "horizontal",
+    side = "after",
+    layout = srv_shell(),
+    focus = true,
+  })
+end, { direction = "string" })
+
+srv_action("srv_zoom", "Zoom Pane (Server)", function()
+  checked(rex.session.zoom_block{})
+end)
+
+srv_action("srv_close_pane", "Close Pane (Server)", function()
+  local view = checked(rex.session.view{})
+  checked(rex.call("block.close", {
+    session_id = view.session_id, window_id = view.active_window_id,
+  }))
+end)
+
+-- Portable scrollback_nvim: capture through the terminal block's format
+-- method (no sh/rex/jq needed), write a temp file on the server's machine,
+-- and open it with nvim there - via WSL on Windows. The tab closes on exit.
+-- rex-prefix.ahk then shows the new (last) tab, since the Windows app
+-- ignores session.select from the server.
+srv_action("srv_scrollback_nvim", "Open Pane Scrollback in Neovim (Server)", function(ctx)
+  local block_id = ctx.block_id
+  if not block_id then
+    local w = active_window(checked(rex.session.view{}))
+    block_id = w and w.focused_block_id
+  end
+  if not block_id then error("No source pane for scrollback", 0) end
+  local out = checked(rex.block.call("com.superlogical.terminal", "format", {
+    block_id = block_id, trim = true, unwrap = true,
+  }))
+  local name = string.format("rex-scrollback-%d-%d.txt", os.time(), math.random(1e6))
+  local path, command
+  if IS_WINDOWS then
+    local dir = os.getenv("TEMP") or os.getenv("TMP") or "."
+    path = dir .. "\\" .. name
+    local wsl_path = path:gsub("^(%a):", function(d) return "/mnt/" .. d:lower() end):gsub("\\", "/")
+    command = { "wsl.exe", "-e", "bash", "-lc", 'nvim + "$1"; rm -f -- "$1"', "scrollback", wsl_path }
+  else
+    path = (os.getenv("TMPDIR") or "/tmp"):gsub("/$", "") .. "/" .. name
+    command = { "sh", "-c", 'nvim + "$1"; rm -f -- "$1"', "scrollback", path }
+  end
+  local f = assert(io.open(path, "wb"))
+  f:write(out.content or "")
+  f:close()
+  checked(rex.session.new_window{
+    window_label = "Scrollback",
+    layout = rex.layout.block{
+      flavor = shell,
+      options = {
+        command = command,
+        exit = { on_completion = true },
+      },
+    },
+  })
+end)
