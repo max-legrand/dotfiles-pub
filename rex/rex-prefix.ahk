@@ -49,15 +49,15 @@ PREFIX := Map(
   "p", ["send", "^q"],                 ; tab_prev
   "v", ["send", "^d"],                 ; pane_split:right
   "%", ["send", "^d"],
-  "s", ["send", "^+d"],                ; pane_split:down
+  "s", ["send", "!k"],                 ; session_picker (config.ini: alt+k)
   '"', ["send", "^+d"],
   "z", ["send", "^+{Enter}"],          ; pane_maximize_toggle
   "X", ["send", "^+w"],                ; pane_close
   "w", ["send", "^+w"],
   "&", ["do", "srv_close_tab"],
   "r", ["send", "{F2}"],               ; tab_rename_prompt
-  "R", ["send", "^!+r"],               ; session_rename_prompt
-  "S", ["send", "^!+s"],               ; session_picker
+  "R", ["send", "+{F2}"],              ; session_rename_prompt (config.ini: shift+f2)
+  "S", ["send", "!k"],                 ; session_picker (config.ini: alt+k)
   "T", ["send", "^+s"],                ; tab_style_toggle
   "<", ["send", "^+{PgUp}"],           ; tab_move_backward
   ">", ["send", "^+{PgDn}"],           ; tab_move_forward
@@ -117,15 +117,19 @@ Worker(host) {
 
 RexDo(action) {
   RexTarget(&pane, &host)
-  WriteLog("do " action " | " (host != "" ? host : "local") " | " pane)
+  RexSend(host, action "`t" pane)
+}
+
+RexSend(host, line) {
+  WriteLog("do " StrReplace(line, "`t", " | ") " | " (host != "" ? host : "local"))
   try {
-    Worker(host).StdIn.WriteLine(action "`t" pane)
+    Worker(host).StdIn.WriteLine(line)
   } catch as e {
     ; The worker died between the status check and the write: retry once
     ; with a fresh one.
     WriteLog("worker write failed (" e.Message "), restarting")
     Workers.Delete(host)
-    Worker(host).StdIn.WriteLine(action "`t" pane)
+    Worker(host).StdIn.WriteLine(line)
   }
 }
 

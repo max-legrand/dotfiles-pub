@@ -39,6 +39,23 @@ opt.whichwrap:append("b,s,<,>,[,],h,l") -- see :help 'whichwrap'
 opt.shortmess:append("c") -- see :help 'shortmess'
 opt.showmode = false -- won't show the mode in the command bar
 
+-- Inside a Rex pane (outside WSL), the pane may be shown on another device,
+-- e.g. the Windows app viewing a session on a Mac. Copy with OSC 52 so Rex
+-- hands the text to the viewing app, which sets *that* device's clipboard.
+-- Rex doesn't answer OSC 52 clipboard reads, so "+ pastes from Neovim's own
+-- unnamed register; use the terminal's paste for the device clipboard.
+if vim.env.REX_SESSION and vim.fn.has("wsl") == 0 then
+	local osc52 = require("vim.ui.clipboard.osc52")
+	local function paste()
+		return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+	end
+	vim.g.clipboard = {
+		name = "OSC 52 (Rex)",
+		copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+		paste = { ["+"] = paste, ["*"] = paste },
+	}
+end
+
 -- sync with system clipboard on focus
 vim.api.nvim_create_autocmd({ "FocusGained" }, {
 	pattern = { "*" },
