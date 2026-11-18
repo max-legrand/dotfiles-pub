@@ -19,6 +19,21 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
+; #SingleInstance only covers one file path, so a copy started from somewhere
+; else (e.g. the dotfiles repo) would run alongside and every key would fire
+; twice. Run only from %AppData%\rex: started elsewhere, deploy this script and
+; its helpers there, start that copy, and exit.
+INSTALLED := EnvGet("APPDATA") "\rex\rex-prefix.ahk"
+if (A_ScriptFullPath != INSTALLED) {
+  DirCreate(EnvGet("APPDATA") "\rex")
+  FileCopy(A_ScriptFullPath, INSTALLED, true)
+  for helper in ["rex-run.lua", "rex-worker.lua"]
+    if FileExist(A_ScriptDir "\" helper)
+      FileCopy(A_ScriptDir "\" helper, EnvGet("APPDATA") "\rex\" helper, true)
+  Run('"' A_AhkPath '" "' INSTALLED '"')
+  ExitApp
+}
+
 REX := EnvGet("LOCALAPPDATA") "\Programs\Rex\rex.exe"
 global Passthrough := false
 
@@ -64,32 +79,61 @@ WriteLog(msg) {
 }
 
 RUN_LUA := EnvGet("APPDATA") "\rex\rex-run.lua"
+WORKER_LUA := EnvGet("APPDATA") "\rex\rex-worker.lua"
 
-; Build `rex.exe [-S HOST] do rex-run.lua title=... action=NAME [args]`.
 ; The window title is "<pane title> - Rex" locally and
-; "<pane title> - Rex (<host url>)" when the app is on a remote host;
-; rex-run.lua uses the pane title to find the session being shown.
-RexCmd(action) {
+; "<pane title> - Rex (<host url>)" when the app is on a remote host.
+; The pane title tells the server-side code which session is being shown.
+RexTarget(&pane, &host) {
   title := WinGetTitle("A"), pane := "", host := ""
   if RegExMatch(title, "^(.*) - Rex(?: \((.+)\))?$", &m) {
     pane := m[1]
     host := m[2]
   }
-  cmd := '"' REX '"'
-  if (host != "")
-    cmd .= ' -S "' host '"'
-  cmd .= ' do "' RUN_LUA '" "title=' StrReplace(pane, '"', '\"') '" action=' action
-  return cmd
+}
+
+RexExe(host) => '"' REX '"' (host != "" ? ' -S "' host '"' : "")
+
+; One long-running rex-worker.lua per host, fed one command per line. It
+; keeps its connection open and runs commands in order, so a key press costs
+; ~5ms (local) or ~20ms (remote) instead of starting rex.exe each time.
+; Workers share a hidden console so no window flashes; a dead worker
+; (server restart, lost connection) is replaced on the next key press.
+global Workers := Map()
+Worker(host) {
+  static consoleReady := false
+  if Workers.Has(host) && Workers[host].Status = 0
+    return Workers[host]
+  if !consoleReady {
+    DllCall("AllocConsole")
+    DllCall("ShowWindow", "ptr", DllCall("GetConsoleWindow", "ptr"), "int", 0)
+    consoleReady := true
+  }
+  WriteLog("starting worker for " (host != "" ? host : "local"))
+  w := ComObject("WScript.Shell").Exec(RexExe(host) ' do "' WORKER_LUA '"')
+  Workers[host] := w
+  return w
 }
 
 RexDo(action) {
-  cmd := RexCmd(action)
-  WriteLog("do " cmd)
-  Run(cmd, , "Hide")
+  RexTarget(&pane, &host)
+  WriteLog("do " action " | " (host != "" ? host : "local") " | " pane)
+  try {
+    Worker(host).StdIn.WriteLine(action "`t" pane)
+  } catch as e {
+    ; The worker died between the status check and the write: retry once
+    ; with a fresh one.
+    WriteLog("worker write failed (" e.Message "), restarting")
+    Workers.Delete(host)
+    Worker(host).StdIn.WriteLine(action "`t" pane)
+  }
 }
 
+; Used when the next step must wait for the action (scrollback, then show
+; its new tab): a one-shot rex.exe running rex-run.lua.
 RexDoWait(action) {
-  cmd := RexCmd(action)
+  RexTarget(&pane, &host)
+  cmd := RexExe(host) ' do "' RUN_LUA '" "title=' StrReplace(pane, '"', '\"') '" action=' action
   WriteLog("do (wait) " cmd)
   RunWait(cmd, , "Hide")
 }
